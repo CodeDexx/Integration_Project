@@ -1,4 +1,4 @@
 package com.example.integration_project.Controller;
 
-public class AddEditController {
+public class ShowtimeController {
 }
