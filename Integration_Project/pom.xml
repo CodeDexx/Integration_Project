@@ -61,7 +61,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.example.integration_project/com.example.integration_project.HelloApplication
+                                com.example.integration_project/com.example.integration_project.MovieTheaterApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
