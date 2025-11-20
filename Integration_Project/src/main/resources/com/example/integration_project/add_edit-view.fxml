@@ -3,7 +3,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Button layoutX="68.0" layoutY="322.0" mnemonicParsing="false" text="Save" />
@@ -13,5 +12,9 @@
       <ChoiceBox layoutX="134.0" layoutY="242.0" prefWidth="150.0" />
       <TextField layoutX="134.0" layoutY="160.0" />
       <Label layoutX="186.0" layoutY="14.0" text="Label" />
+      <Label layoutX="40.0" layoutY="132.0" text="Name" />
+      <Label layoutX="42.0" layoutY="107.0" text="Movie" />
+      <Label layoutX="42.0" layoutY="210.0" text="Date" />
+      <Label layoutX="41.0" layoutY="246.0" text="Showtime" />
    </children>
 </AnchorPane>
