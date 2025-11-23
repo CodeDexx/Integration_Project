@@ -16,8 +16,6 @@ public class ManagerDashboardController {
     private Label aPageTitle;
 
     @FXML
-    private Button aBackButton;
-    @FXML
     private Button aLogoutButton;
 
     private Client aClient;
@@ -39,17 +37,24 @@ public class ManagerDashboardController {
 
     @FXML
     private void onDeleteButtonClick() {
-        if(this.aManager == null){
-            AlertHelper.showErrorAlert("Delete Error", "No manager found", "Please log in as a manager before deleting.");
-            return;
+        try{
+            if(this.aManager == null){
+                AlertHelper.showErrorAlert("Delete Error", "No manager found", "Please log in as a manager before deleting.");
+                return;
+            }
+            if(this.aClient == null){
+                AlertHelper.showErrorAlert("Delete Error", "No client selected", "Please select a client before deleting.");
+                return;
+            }
+            this.aManager.deleteUser(this.aClient);
+            AlertHelper.showInfoAlert("Delete", "Client Deleted", "The animal has been deleted successfully.");
+        } catch(Exception e){
+            AlertHelper.showErrorAlert("Delete Error", "Delete Error", e.getMessage());
         }
-        if(this.aClient == null){
-            AlertHelper.showErrorAlert("Delete Error", "No client selected", "Please select a client before deleting.");
-            return;
-        }
-        this.aManager.deleteUser(this.aClient);
-        AlertHelper.showInfoAlert("Delete", "Client Deleted", "The animal has been deleted successfully.");
     }
+
+
+
 
 
 }
