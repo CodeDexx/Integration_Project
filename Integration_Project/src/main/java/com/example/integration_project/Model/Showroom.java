@@ -1,25 +1,38 @@
 package com.example.integration_project.Model;
 
-public class Showroom {
-    private String showroom;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
-    public String getShowroom() {
-        return showroom;
+public class Showroom {
+    private String room;
+    private final ObservableList<Showroom> rooms = FXCollections.observableArrayList();
+
+    public ObservableList<Showroom> getRooms() {
+        return rooms;
     }
-    public void setShowroom(String showroom) {
-        this.showroom = showroom;
+
+    public Showroom(String room) {
+        setRoomNumber(room);
     }
-    public Showroom(String showroom) {
-        this.showroom = showroom;
+
+    public String getName() {
+        return room;
     }
-    public String addShowroom () {
-        return showroom;
+    public void setRoomNumber(String room) {
+        if (room == null || room.isBlank()) {
+            throw new IllegalArgumentException("Room number must not be empty");
+        }
+        this.room = room.trim();
     }
-    public String removeShowroom () {
-        return showroom;
+    public String addRoom (Showroom showroom) {
+        rooms.add(showroom);
+        return room;
     }
-    public String editShowroom () {
-        return showroom;
+    public String removeRoom (Showroom showroom) {
+        rooms.remove(showroom);
+        return room;
+    }
+    public String editRoom () {
+        return room;
     }
 }
-

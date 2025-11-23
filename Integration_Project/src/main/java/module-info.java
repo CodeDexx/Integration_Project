@@ -1,6 +1,7 @@
 module com.example.integration_project {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.base;
 
 
     opens com.example.integration_project to javafx.fxml;
