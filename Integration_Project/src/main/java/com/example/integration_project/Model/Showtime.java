@@ -1,40 +1,49 @@
 package com.example.integration_project.Model;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Showtime {
-    private Date showtime;
-    private final ObservableList<Showtime> showtimes = FXCollections.observableArrayList();
+    private LocalDateTime showtime;
+    private Movie movie;
+    private Showroom showroom;
 
-    public ObservableList<Showtime> getShowtimes() {
-        return showtimes;
+    public Showtime(Movie movie, LocalDateTime showtime, Showroom showroom) {
+        setMovie(movie);
+        setShowtime(showtime);
+        setShowroom(showroom);
     }
 
-    /* public Showtime(Date date) {
-        setMovieName(movieName);
-    }*/
+    public LocalDateTime getShowtime() {
+        return showtime;
+    }
 
-   /* public String getName() {
-        return movieName;
-    }*/
-    /*public void setMovieName(String movieName) {
-        if (movieName == null || movieName.isBlank()) {
-            throw new IllegalArgumentException("Movie name must not be empty");
+    public Movie getMovie() {
+        return movie;
+    }
+
+    public Showroom getShowroom() {
+        return showroom;
+    }
+
+    public void setMovie(Movie movie) {
+        if (movie == null) {
+            throw new IllegalArgumentException("Movie must not be null");
         }
-        this.movieName = movieName.trim();
-    }*/
-    public Date addShowtime (Showtime showtime) {
-        showtimes.add(showtime);
-        return showtime;
+        this.movie = movie;
     }
-    public String removeShowtime (Showtime showtime) {
-        showtimes.remove(showtime);
-        return showtime;
+
+    public void setShowtime(LocalDateTime showtime) {
+        if (showtime.isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Showtime must be in the future");
+        }
+        this.showtime = showtime;
     }
-    public String editShowtime () {
-        return showtime;
+
+    public void setShowroom(Showroom showroom) {
+        if (showroom == null) {
+            throw new IllegalArgumentException("Showroom must not be null");
+        }
+        this.showroom = showroom;
     }
+
 }

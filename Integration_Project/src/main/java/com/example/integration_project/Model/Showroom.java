@@ -1,38 +1,34 @@
 package com.example.integration_project.Model;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 public class Showroom {
-    private String room;
-    private final ObservableList<Showroom> rooms = FXCollections.observableArrayList();
+    private int roomNumber;
+    private int roomCapacity;
 
-    public ObservableList<Showroom> getRooms() {
-        return rooms;
+    public Showroom(int roomNumber, int roomCapacity) {
+        setRoomNumber(roomNumber);
+        setRoomCapacity(roomCapacity);
     }
 
-    public Showroom(String room) {
-        setRoomNumber(room);
+    public int getCapacity() {
+        return roomCapacity;
     }
 
-    public String getName() {
-        return room;
+    public int getRoomNumber() {
+        return roomNumber;
     }
-    public void setRoomNumber(String room) {
-        if (room == null || room.isBlank()) {
-            throw new IllegalArgumentException("Room number must not be empty");
+
+    public void setRoomNumber(int roomNumber) {
+        if (roomNumber <= 0) {
+            throw new IllegalArgumentException("Room number must be greater than 0");
         }
-        this.room = room.trim();
+        this.roomNumber = roomNumber;
     }
-    public String addRoom (Showroom showroom) {
-        rooms.add(showroom);
-        return room;
+
+    public void setRoomCapacity(int roomCapacity) {
+        if (roomCapacity <= 0) {
+            throw new IllegalArgumentException("Room capacity must be greater than zero");
+        }
+        this.roomCapacity = roomCapacity;
     }
-    public String removeRoom (Showroom showroom) {
-        rooms.remove(showroom);
-        return room;
-    }
-    public String editRoom () {
-        return room;
-    }
+
 }
