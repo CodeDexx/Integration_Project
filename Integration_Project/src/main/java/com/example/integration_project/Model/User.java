@@ -6,7 +6,7 @@ public class User {
     private final String aEmail;
 
     public User(String pName, String pEmail, String pPassword) {
-        if(pEmail!=null || pPassword!=null || pName!=null) {
+        if(isNullOrEmpty(pName) || isNullOrEmpty(pEmail) || isNullOrEmpty(pPassword)) {
             throw new IllegalArgumentException("Name, email or password is null");
         }
         this.aName = pName;
@@ -15,35 +15,40 @@ public class User {
     }
 
     public User(String pEmail, String pPassword) {
-        if(pEmail!=null || pPassword!=null){
+        if(isNullOrEmpty(pEmail) || isNullOrEmpty(pPassword)){
             throw new IllegalArgumentException("Either email or password is null");
         }
         this.aEmail = pEmail;
         this.aPassword = pPassword;
     }
 
-    String getName(){
-        return this.aName;
+    private boolean isNullOrEmpty(String pValue) {
+        return pValue == null || pValue.isEmpty();
     }
 
-    void setName(String pName){
-        if(pName!=null){
-            throw new IllegalArgumentException("Name is null.");
+    public String getName() {
+        return aName;
+    }
+
+    public String setName(String pName) {
+        if(isNullOrEmpty(pName)) {
+            throw new IllegalArgumentException("Name cannot be empty");
         }
-        this.aName=pName;
+        this.aName = pName;
+        return pName;
     }
 
-    String getEmailAddress(){
+    public String getEmailAddress(){
         return this.aEmail;
     }
 
-    String getPassword(){
+    public String getPassword(){
         return this.aPassword;
     }
 
     void setPassword(String pPassword){
-        if(pPassword!=null){
-            throw new IllegalArgumentException("Password is null");
+        if(isNullOrEmpty(pPassword)) {
+            throw new IllegalArgumentException("Password cannot be null");
         }
         this.aPassword = pPassword;
     }
