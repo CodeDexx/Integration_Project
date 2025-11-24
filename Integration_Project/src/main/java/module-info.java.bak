@@ -1,7 +1,12 @@
 module com.example.integration_project {
     requires javafx.controls;
     requires javafx.fxml;
+<<<<<<< HEAD
+    requires java.desktop;
+    requires javafx.graphics;
+=======
     requires javafx.base;
+>>>>>>> Ian
 
 
     opens com.example.integration_project to javafx.fxml;
