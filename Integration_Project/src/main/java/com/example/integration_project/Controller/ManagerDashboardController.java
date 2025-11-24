@@ -6,9 +6,13 @@ import com.example.integration_project.Helpers.AlertHelper;
 import com.example.integration_project.Model.Client;
 import com.example.integration_project.Model.Manager;
 import com.example.integration_project.Model.Movie;
+import com.example.integration_project.Model.MovieManager;
 import com.example.integration_project.Model.Showroom;
+import com.example.integration_project.Model.ShowroomManager;
 import com.example.integration_project.Model.Showtime;
+import com.example.integration_project.Model.ShowtimeManager;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -26,31 +30,59 @@ public class ManagerDashboardController {
     private Client aClient;
     private Manager aManager;
     private Stage aStage = new Stage();
-    private Showtime aShowtime;
-    private ListView<Showroom> aShowroomListView;
-    private ListView<Showtime> aShowtimesListView;
-    private ListView<Movie> aMovieListView;
+    private String aCurrentView;
+    private MovieManager aMovieManager = new MovieManager();
+    private ShowtimeManager aShowtimeManager = new ShowtimeManager();
+    private ShowroomManager aShowroomManager = new ShowroomManager();
     
     @FXML
-    private ListView aListView;
-    private List aItems;
+    private ListView<Object> aListView = new  ListView<>();
+    private Object aSelectedItem;
 
     @FXML
     private void initialize() {
         // Initialize the controller if needed
-
+        this.aCurrentView = "Movies";
+        refreshView("Movies");
     }
 
-    private void refreshView(){
-        
-        //this.aItems.addAll()
-        this.aListView.getItems().clear();
+    private void refreshView(String pCurrentListView){
+    
+        //Listing the items in the ListView based on the current view
 
-        this.aListView.getItems().addAll(this.aItems);
-    }
-    @FXML
-    protected void onHelloButtonClick() {
-        this.aPageTitle.setText("Welcome to JavaFX Application!");
+        switch (pCurrentListView) {
+            case "Movies" -> {
+                this.aListView.getItems().clear();
+                if(this.aManager != null){
+                    // Getting the list of movies from the manager
+                    for (Movie movie : aMovieManager.getMovies()) {
+                        this.aListView.getItems().add("Sample Movie Item");
+                        this.aListView.getItems().add(movie.getName());
+                    }
+                }
+                else{
+                    AlertHelper.showErrorAlert("Display Error", "Empty Movie List","The list of movies is currently empty. Please add some.");
+                }
+            }
+            case "Showtimes" -> {
+                this.aListView.getItems().clear();
+                if(this.aManager == null){
+                    // Getting the list of showtimes from the manager
+                    this.aListView.getItems().add("Sample Showtime Item");
+                    this.aListView.getItems().addAll(this.aShowtimeManager.getShowtimes());
+                }
+            }
+            case "Showrooms" -> {
+                this.aListView.getItems().clear();
+                if(this.aManager != null){
+                    // Getting the list of showrooms from the manager
+                    this.aListView.getItems().add("Sample Showrooms Item");
+                    this.aListView.getItems().addAll(this.aShowroomManager.getShowrooms());
+                }
+            }
+            default -> {
+            }
+        }
     }
 
     @FXML
@@ -58,7 +90,8 @@ public class ManagerDashboardController {
         aStage = (Stage) aLogoutButton.getScene().getWindow();
         aStage.close();
     }
-    @FXML 
+
+    @FXML
     private void onAddButtonClick() {
         // Object.getClass
 
@@ -103,30 +136,28 @@ public class ManagerDashboardController {
     }
 
     @FXML
-    private void onMoviesButtonClick() {
-        this.aItems = null;
+    private void onMoviesButtonClick(ActionEvent pEvent) {
+        this.aSelectedItem = null;
+        this.aCurrentView = ((Button) pEvent.getSource()).getText();
         if(this.aManager != null){
-            // this.aItems = this.aManager.getMovies();
+            this.refreshView(this.aCurrentView);
         }
-        this.refreshView();
     }
     
     @FXML 
-    private void onShowtimesButtonClick() {
-        this.aItems = null;
-        if(this.aManager != null){
-            // this.aItems = List.of(this.aManager.getShowtimes());
+    private void onShowtimesButtonClick(ActionEvent pEvent) {
+        this.aSelectedItem = null;
+        if(this.aManager == null){
+            this.refreshView(((Button) pEvent.getSource()).getText());
         }
-        this.refreshView();
     }
 
     @FXML
-    private void onShowroomsButtonClick() {
-        this.aItems = null;
+    private void onShowroomsButtonClick(ActionEvent pEvent) {
+        this.aSelectedItem = null;
         if(this.aManager != null){
-            // this.aItems = this.aManager.getShowrooms();
+            this.refreshView(((Button) pEvent.getSource()).getText());
         }
-        this.refreshView();
     }
 
     @FXML
@@ -159,20 +190,4 @@ public class ManagerDashboardController {
             AlertHelper.showErrorAlert("Delete Error", "Delete Error", e.getMessage());
         }
     }
-
-    // private Showtime getShowtimeById(int pShowtimeId) {
-    //     for (Showtime showtime : this.aManager.getShowtimes()) {
-    //         if (showtime.getId() == pShowtimeId) {
-    //             this.aShowtime = showtime;
-    //             return showtime;
-    //         }
-    //     }
-    //     return null;
-    // }
-
-    // private String getSelectedItem(){
-
-    //     return 
-    // }
-
 }
