@@ -1,31 +1,28 @@
 package com.example.integration_project.Model;
 
+/**
+ * @author Emmanuelle
+ * This class represent a Ticket generatedd when a client books a Show.
+ * This Ticket generated will be shown in a popup view when the ckient clicks on the book button.
+ */
 public class Ticket {
     private final String aTicketID;
-    private final String aMovieName;
-    private final String aShowtime;
 
+    /**
+     * Creates a ticket with the necessary information
+     * @param pTicketId The ticket unique identifier
+     */
 
-    public Ticket(String pTicketId, String pMovieName, String pShowtime) {
+    public Ticket(String pTicketId) {
         aTicketID = pTicketId;
-        aMovieName = pMovieName;
-        aShowtime = pShowtime;
     }
 
     public String getaTicketID() {
         return aTicketID;
     }
 
-    public String getaMovieName() {
-        return aMovieName;
-    }
-
-    public String getaShowtime() {
-        return aShowtime;
-    }
-
+    @Override
     public String toString() {
-        return "Ticket Confirmation\n" + "Ticket ID: " + aTicketID + "\n" +
-                "Movie: " + aMovieName + "\n" + "Showtime: " + aShowtime + "\n";
+        return "Ticket Confirmation\n" + "Ticket ID: " + aTicketID;
     }
 }

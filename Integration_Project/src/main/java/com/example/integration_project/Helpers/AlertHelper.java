@@ -26,7 +26,7 @@ public class AlertHelper {
         alert.setContentText(pMessage);
         alert.showAndWait();
     }
-    // Ticket ticket = new Ticket("T102AQ5", "Matrix", "9:00 PM");
+    // Ticket ticket = new Ticket("T102AQ5");
     // AlertHelper.showTicketConfirmationAlert(ticket);
 
 
