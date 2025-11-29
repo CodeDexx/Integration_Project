@@ -3,20 +3,24 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integration_project.Controller.AddEditController">
    <children>
-      <Button layoutX="68.0" layoutY="296.0" mnemonicParsing="false" text="Save" />
-      <Button layoutX="285.0" layoutY="296.0" mnemonicParsing="false" text="Cancel" />
-      <DatePicker layoutX="124.0" layoutY="148.0" prefHeight="26.0" prefWidth="150.0" />
-      <ChoiceBox layoutX="125.0" layoutY="62.0" prefWidth="150.0" />
-      <ChoiceBox layoutX="124.0" layoutY="187.0" prefWidth="150.0" />
-      <TextField layoutX="125.0" layoutY="108.0" />
-      <Label layoutX="186.0" layoutY="14.0" text="Label" />
-      <Label layoutX="77.0" layoutY="112.0" text="Name" />
-      <Label layoutX="77.0" layoutY="66.0" text="Movie" />
-      <Label layoutX="75.0" layoutY="152.0" text="Date" />
-      <Label layoutX="61.0" layoutY="191.0" text="Showtime" />
-      <ChoiceBox layoutX="125.0" layoutY="230.0" prefWidth="150.0" />
-      <Label layoutX="71.0" layoutY="234.0" text="Room" />
+      <Button fx:id="aSaveButton" layoutX="68.0" layoutY="296.0" mnemonicParsing="false" onAction="#handleSaveButtonClick" text="Save" />
+      <Button fx:id="aCancelButton" layoutX="285.0" layoutY="296.0" mnemonicParsing="false" onAction="#handleCancelButtonClick" text="Cancel" />
+      <DatePicker fx:id="aDatePicker" layoutX="124.0" layoutY="148.0" prefHeight="26.0" prefWidth="150.0" />
+      <TextField fx:id="aTimeTextField" layoutX="125.0" layoutY="169.0" prefHeight="26.0" prefWidth="150.0" promptText="HH:mm" />
+      <ChoiceBox fx:id="aMovieChoiceBox" layoutX="125.0" layoutY="62.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="aShowtimeChoiceBox" layoutX="124.0" layoutY="187.0" prefWidth="150.0" />
+      <TextField fx:id="aNameTextField" layoutX="125.0" layoutY="108.0" />
+      <Label fx:id="aTitleLabel" layoutX="186.0" layoutY="14.0" text="Label" />
+      <Label fx:id="aNameLabel" layoutX="77.0" layoutY="112.0" text="Name" />
+      <Label fx:id="aMovieLabel" layoutX="77.0" layoutY="66.0" text="Movie" />
+      <Label fx:id="aDateLabel" layoutX="75.0" layoutY="152.0" text="Date" />
+      <Label layoutX="77.0" layoutY="173.0" text="Time" fx:id="aTimeLabel" />
+      <Label fx:id="aShowtimeLabel" layoutX="61.0" layoutY="191.0" text="Showtime" />
+      <ChoiceBox fx:id="aRoomChoiceBox" layoutX="125.0" layoutY="230.0" prefWidth="150.0" />
+      <Label fx:id="aRoomLabel" layoutX="71.0" layoutY="234.0" text="Room" />
+      <TextField layoutX="125.0" layoutY="148.0" fx:id="aCapacityTextField"/>
+      <Label layoutX="64.0" layoutY="153.0" text="Capacity" fx:id="aCapacityLabel"/>
    </children>
 </AnchorPane>

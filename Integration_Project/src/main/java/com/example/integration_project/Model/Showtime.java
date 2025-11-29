@@ -1,6 +1,8 @@
 package com.example.integration_project.Model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * Represents a showtime (screening) in the theater system.
@@ -56,6 +58,20 @@ public class Showtime {
         return showroom;
     }
 
+    public LocalDate getDate() {
+        return this.showtime.toLocalDate();
+    }
+
+    // Existing methods in the Showtime class
+
+    /**
+     * Gets the time of the showtime.
+     * @return the time as a String
+     */
+    public String getTime() {
+        return this.showtime.toLocalTime().toString();
+    }
+
     /**
      * Sets the movie for this showtime with validation.
      * 
@@ -93,6 +109,28 @@ public class Showtime {
             throw new IllegalArgumentException("Showroom must not be null");
         }
         this.showroom = showroom;
+    }
+
+    public void setDate(LocalDate date) {
+        if (date == null) {
+            throw new IllegalArgumentException("Date cannot be null");
+        }
+        // Combine with existing time
+        LocalTime currentTime = this.showtime.toLocalTime();
+        setShowtime(LocalDateTime.of(date, currentTime));
+    }
+    
+    public void setTime(String timeString) {
+        if (timeString == null || timeString.isBlank()) {
+            throw new IllegalArgumentException("Time cannot be empty");
+        }
+        try {
+            LocalTime time = LocalTime.parse(timeString); // "HH:mm" format
+            LocalDate currentDate = this.showtime.toLocalDate();
+            setShowtime(LocalDateTime.of(currentDate, time));
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid time format. Use HH:mm");
+        }
     }
 
 }
