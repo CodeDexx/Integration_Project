@@ -6,7 +6,12 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
+import com.example.integration_project.Helpers.AlertHelper;
 import com.example.integration_project.Model.Movie;
 import com.example.integration_project.Model.MovieManager;
 import com.example.integration_project.Model.Showroom;
@@ -283,14 +288,191 @@ public class AddEditController {
      */
     @FXML
     private void handleSaveButtonClick() {
-        // TODO: Implement save logic
+        switch(aMode) {
+            case ADD_MOVIE:
+                String movieName = aNameTextField.getText().trim();
+                if (movieName.isEmpty()) {
+                    AlertHelper.showErrorAlert("Validation Error", "Empty Field", "Please enter a movie name");
+                    return;
+                }
+                try {
+                    Movie newMovie = new Movie(movieName);
+                    aMovieManager.addMovie(newMovie);
+                    AlertHelper.showInfoAlert("Success", "Movie Added", "Movie has been added successfully");
+                    closeWindow();
+                } catch (IllegalArgumentException e) {
+                    AlertHelper.showErrorAlert("Error", "Invalid Movie", e.getMessage());
+                }
+                break;
+            case EDIT_MOVIE:
+                movieName = aNameTextField.getText().trim();
+                if (movieName.isEmpty()) {
+                    AlertHelper.showErrorAlert("Validation Error", "Empty Field", 
+                        "Please enter a movie name");
+                    return;
+                }
+                try {
+                    Movie movie = (Movie) aCurrentObject;
+                    movie.setMovieName(movieName);
+                    AlertHelper.showInfoAlert("Success", "Movie Updated", 
+                        "Movie has been updated successfully");
+                    closeWindow();
+                } catch (IllegalArgumentException e) {
+                    AlertHelper.showErrorAlert("Error", "Invalid Movie", e.getMessage());
+                }
+                break;
+            case ADD_SHOWTIME:
+                    try {
+                        // Validate selections
+                        if (aMovieChoiceBox.getValue() == null) {
+                            AlertHelper.showErrorAlert("Validation Error", "Movie Required", 
+                                "Please select a movie");
+                            return;
+                        }
+                        if (aRoomChoiceBox.getValue() == null) {
+                            AlertHelper.showErrorAlert("Validation Error", "Room Required", 
+                                "Please select a room");
+                            return;
+                        }
+                        if (aDatePicker.getValue() == null) {
+                            AlertHelper.showErrorAlert("Validation Error", "Date Required", 
+                                "Please select a date");
+                            return;
+                        }
+                        if (aTimeTextField.getText().trim().isEmpty()) {
+                            AlertHelper.showErrorAlert("Validation Error", "Time Required", 
+                                "Please enter a time (HH:mm)");
+                            return;
+                        }
+                        
+                        // Create Showtime
+                        Movie movie = aMovieChoiceBox.getValue();
+                        Showroom room = aRoomChoiceBox.getValue();
+                        LocalDate date = aDatePicker.getValue();
+                        String timeStr = aTimeTextField.getText().trim();
+                        
+                        // Combine date and time
+                        LocalTime time = LocalTime.parse(timeStr);
+                        LocalDateTime dateTime = LocalDateTime.of(date, time);
+                        
+                        Showtime newShowtime = new Showtime(movie, dateTime, room);
+                        aShowtimeManager.addShowtime(newShowtime);
+                        AlertHelper.showInfoAlert("Success", "Showtime Added", 
+                            "Showtime has been added successfully");
+                        closeWindow();
+                    } catch (IllegalArgumentException e) {
+                        AlertHelper.showErrorAlert("Error", "Invalid Showtime", e.getMessage());
+                    } catch (Exception e) {
+                        AlertHelper.showErrorAlert("Error", "Parse Error", 
+                            "Invalid time format. Use HH:mm");
+                    }
+                    break;
+            case EDIT_SHOWTIME:
+                    try {
+                        // Validate selections
+                        if (aMovieChoiceBox.getValue() == null) {
+                            AlertHelper.showErrorAlert("Validation Error", "Movie Required", 
+                                "Please select a movie");
+                            return;
+                        }
+                        if (aRoomChoiceBox.getValue() == null) {
+                            AlertHelper.showErrorAlert("Validation Error", "Room Required", 
+                                "Please select a room");
+                            return;
+                        }
+                        if (aDatePicker.getValue() == null) {
+                            AlertHelper.showErrorAlert("Validation Error", "Date Required", 
+                                "Please select a date");
+                            return;
+                        }
+                        if (aTimeTextField.getText().trim().isEmpty()) {
+                            AlertHelper.showErrorAlert("Validation Error", "Time Required", 
+                                "Please enter a time (HH:mm)");
+                            return;
+                        }
+                        
+                        Showtime showtime = (Showtime) aCurrentObject;
+                        showtime.setMovie(aMovieChoiceBox.getValue());
+                        showtime.setShowroom(aRoomChoiceBox.getValue());
+                        showtime.setDate(aDatePicker.getValue());
+                        showtime.setTime(aTimeTextField.getText().trim());
+                        AlertHelper.showInfoAlert("Success", "Showtime Updated", 
+                            "Showtime has been updated successfully");
+                        closeWindow();
+                    } catch (IllegalArgumentException e) {
+                        AlertHelper.showErrorAlert("Error", "Invalid Showtime", e.getMessage());
+                    } catch (Exception e) {
+                        AlertHelper.showErrorAlert("Error", "Parse Error", 
+                            "Invalid time format. Use HH:mm");
+                    }
+                    break;
+            case ADD_ROOM:
+                try {
+                    String roomNumberStr = aNameTextField.getText().trim();
+                    String capacityStr = aCapacityTextField.getText().trim();
+                    
+                    if (roomNumberStr.isEmpty() || capacityStr.isEmpty()) {
+                        AlertHelper.showErrorAlert("Validation Error", "Empty Field", 
+                            "Please enter both room number and capacity");
+                        return;
+                    }
+                    
+                    int roomNumber = Integer.parseInt(roomNumberStr);
+                    int capacity = Integer.parseInt(capacityStr);
+                    
+                    Showroom newRoom = new Showroom(roomNumber, capacity);
+                    aShowroomManager.addShowroom(newRoom);
+                    AlertHelper.showInfoAlert("Success", "Room Added", 
+                        "Room has been added successfully");
+                    closeWindow();
+                } catch (NumberFormatException e) {
+                    AlertHelper.showErrorAlert("Error", "Invalid Number", 
+                        "Room number and capacity must be numbers");
+                } catch (IllegalArgumentException e) {
+                    AlertHelper.showErrorAlert("Error", "Invalid Room", e.getMessage());
+                }
+                break;
+            case EDIT_ROOM:
+                try {
+                    String roomNumberStr = aNameTextField.getText().trim();
+                    String capacityStr = aCapacityTextField.getText().trim();
+                    
+                    if (roomNumberStr.isEmpty() || capacityStr.isEmpty()) {
+                        AlertHelper.showErrorAlert("Validation Error", "Empty Field", 
+                            "Please enter both room number and capacity");
+                        return;
+                    }
+                    
+                    int roomNumber = Integer.parseInt(roomNumberStr);
+                    int capacity = Integer.parseInt(capacityStr);
+                    
+                    Showroom room = (Showroom) aCurrentObject;
+                    room.setRoomNumber(roomNumber);
+                    room.setRoomCapacity(capacity);
+                    AlertHelper.showInfoAlert("Success", "Room Updated", 
+                        "Room has been updated successfully");
+                    closeWindow();
+                } catch (NumberFormatException e) {
+                    AlertHelper.showErrorAlert("Error", "Invalid Number", 
+                        "Room number and capacity must be numbers");
+                } catch (IllegalArgumentException e) {
+                    AlertHelper.showErrorAlert("Error", "Invalid Room", e.getMessage());
+                }
+                break;
+        }
     }
     
     /**
      * Handles the Cancel button click event.
+     * Closes the window without saving any changes.
      */
     @FXML
     private void handleCancelButtonClick() {
-        // TODO: Implement cancel logic
+        closeWindow();
+    }
+
+    private void closeWindow() {
+        Stage stage = (Stage) aSaveButton.getScene().getWindow();
+        stage.close();
     }
 }
