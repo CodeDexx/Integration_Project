@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integration_project.Controller.AddEditController">
    <children>
       <Button fx:id="aSaveButton" layoutX="68.0" layoutY="296.0" mnemonicParsing="false" onAction="#handleSaveButtonClick" text="Save" />
@@ -10,7 +11,6 @@
       <DatePicker fx:id="aDatePicker" layoutX="124.0" layoutY="148.0" prefHeight="26.0" prefWidth="150.0" />
       <TextField fx:id="aTimeTextField" layoutX="125.0" layoutY="169.0" prefHeight="26.0" prefWidth="150.0" promptText="HH:mm" />
       <ChoiceBox fx:id="aMovieChoiceBox" layoutX="125.0" layoutY="62.0" prefWidth="150.0" />
-      <ChoiceBox fx:id="aShowtimeChoiceBox" layoutX="124.0" layoutY="187.0" prefWidth="150.0" />
       <TextField fx:id="aNameTextField" layoutX="125.0" layoutY="108.0" />
       <Label fx:id="aTitleLabel" layoutX="186.0" layoutY="14.0" text="Label" />
       <Label fx:id="aNameLabel" layoutX="77.0" layoutY="112.0" text="Name" />
