@@ -20,85 +20,183 @@ import com.example.integration_project.Model.Showtime;
 import com.example.integration_project.Model.ShowtimeManager;
 
 /**
- * Controller for the add-edit-view.fxml
- * Handles adding and editing of Movies, Showtimes, and Showrooms.
- * Uses a single view with conditional logic based on FormMode.
+ * Controller for the add-edit-view.fxml file in the Movie Theater Management System.
+ * 
+ * This controller handles adding and editing operations for three entity types:
+ * Movies, Showtimes, and Showrooms. It implements the MVC pattern by managing the
+ * interaction between the FXML view and the model classes through manager instances.
+ * 
+ * <p>The controller uses a single reusable FXML view with conditional UI logic based
+ * on the FormMode enum, reducing code duplication while providing specialized
+ * functionality for each entity type.</p>
+ * 
+ * <p>Key responsibilities include:
+ * <ul>
+ *   <li>Initializing the form based on the operation mode (add/edit)</li>
+ *   <li>Setting up UI visibility based on the type of entity being managed</li>
+ *   <li>Populating UI choice boxes with data from managers</li>
+ *   <li>Pre-filling form fields when editing existing objects</li>
+ *   <li>Validating user input before saving</li>
+ *   <li>Creating new objects or updating existing ones through manager classes</li>
+ *   <li>Providing user feedback through alert dialogs</li>
+ * </ul>
+ * </p>
  * 
  * @author Ian
  * @version 1.0
+ * @see FormMode
+ * @see Movie
+ * @see Showtime
+ * @see Showroom
+ * @see MovieManager
+ * @see ShowtimeManager
+ * @see ShowroomManager
+ * @see AlertHelper
  */
 public class AddEditController {
     
     /**
      * Enum representing the different modes this controller can operate in.
+     * 
+     * <p>Each mode determines which fields are visible, what validation rules apply,
+     * and what operation (add or edit) is performed on which entity type.</p>
+     * 
+     * <ul>
+     *   <li>{@code ADD_MOVIE} - Create a new movie</li>
+     *   <li>{@code EDIT_MOVIE} - Modify an existing movie</li>
+     *   <li>{@code ADD_SHOWTIME} - Create a new showtime</li>
+     *   <li>{@code EDIT_SHOWTIME} - Modify an existing showtime</li>
+     *   <li>{@code ADD_ROOM} - Create a new showroom</li>
+     *   <li>{@code EDIT_ROOM} - Modify an existing showroom</li>
+     * </ul>
      */
     public enum FormMode {
-        ADD_MOVIE, EDIT_MOVIE,
-        ADD_SHOWTIME, EDIT_SHOWTIME,
-        ADD_ROOM, EDIT_ROOM
+        /** Create a new movie */
+        ADD_MOVIE,
+        /** Modify an existing movie */
+        EDIT_MOVIE,
+        /** Create a new showtime */
+        ADD_SHOWTIME,
+        /** Modify an existing showtime */
+        EDIT_SHOWTIME,
+        /** Create a new showroom */
+        ADD_ROOM,
+        /** Modify an existing showroom */
+        EDIT_ROOM
     }
     
+    /** The current operation mode (add or edit, and which entity type) */
     private FormMode aMode;
-    private Object aCurrentObject; // Can be Movie, Showtime, or Showroom
     
+    /** The object being edited. Can be a Movie, Showtime, or Showroom. Null if adding new. */
+    private Object aCurrentObject;
+    
+    /** Manager responsible for Movie persistence and retrieval operations */
     private MovieManager aMovieManager;
+    
+    /** Manager responsible for Showtime persistence and retrieval operations */
     private ShowtimeManager aShowtimeManager;
+    
+    /** Manager responsible for Showroom persistence and retrieval operations */
     private ShowroomManager aShowroomManager;
     
+    /** Label displaying the title of the dialog (e.g., "Add Movie", "Edit Showtime") */
     @FXML
     private Label aTitleLabel;
     
+    /** Text field for entering the name of a Movie or the room number of a Showroom */
     @FXML
     private TextField aNameTextField;
     
+    /** Choice box for selecting a Movie when adding or editing a Showtime */
     @FXML
     private ChoiceBox<Movie> aMovieChoiceBox;
 
+    /** Text field for entering the capacity of a Showroom */
     @FXML
     private TextField aCapacityTextField;
     
+    /** Date picker for selecting the date of a Showtime */
     @FXML
     private DatePicker aDatePicker;
     
+    /** Choice box for selecting from a list of Showtimes (currently unused but retained for future use) */
     @FXML
     private ChoiceBox<Showtime> aShowtimeChoiceBox;
     
+    /** Choice box for selecting a Showroom when adding or editing a Showtime */
     @FXML
     private ChoiceBox<Showroom> aRoomChoiceBox;
     
+    /** Button to save changes or create a new object */
     @FXML
     private Button aSaveButton;
     
+    /** Button to cancel the operation without saving */
     @FXML
     private Button aCancelButton;
 
-    @FXML private Label aNameLabel;
+    /** Label for the name field (displays "Name" for Movies or "Number" for Rooms) */
+    @FXML
+    private Label aNameLabel;
 
-    @FXML private Label aMovieLabel;
+    /** Label for the movie choice box field */
+    @FXML
+    private Label aMovieLabel;
 
-    @FXML private Label aDateLabel;
+    /** Label for the date picker field */
+    @FXML
+    private Label aDateLabel;
 
-    @FXML private Label aShowtimeLabel;
+    /** Label for the showtime choice box field */
+    @FXML
+    private Label aShowtimeLabel;
 
-    @FXML private Label aRoomLabel;
+    /** Label for the room choice box field */
+    @FXML
+    private Label aRoomLabel;
 
-    @FXML private Label aCapacityLabel;
+    /** Label for the capacity field */
+    @FXML
+    private Label aCapacityLabel;
     
+    /** Text field for entering the time of a Showtime in "HH:mm" format */
     @FXML
     private TextField aTimeTextField;
     
+    /** Label for the time text field */
     @FXML
     private Label aTimeLabel;
     
     /**
      * Initializes the controller with the necessary data and managers.
-     * This method should be called after the FXML is loaded but before the stage is shown.
      * 
-     * @param pMode the FormMode indicating what operation to perform
-     * @param pCurrentObject the object being edited (null if adding new)
-     * @param pMovieManager the MovieManager instance for movie operations
-     * @param pShowtimeManager the ShowtimeManager instance for showtime operations
-     * @param pShowroomManager the ShowroomManager instance for showroom operations
+     * <p>This method should be called after the FXML is loaded but before the stage is shown.
+     * It sets up the initial state of the form by storing references to the managers,
+     * determining the operation mode, and orchestrating the setup sequence.</p>
+     * 
+     * <p>The initialization sequence:
+     * <ol>
+     *   <li>Stores the provided managers and mode information</li>
+     *   <li>Calls {@link #setupUI()} to configure field visibility and labels</li>
+     *   <li>Calls {@link #populateChoiceBoxes()} to load data from managers</li>
+     *   <li>Calls {@link #populateFields()} to pre-fill form fields if editing</li>
+     * </ol>
+     * </p>
+     * 
+     * @param pMode the FormMode indicating what operation to perform (add or edit which entity)
+     * @param pCurrentObject the object being edited, or {@code null} if adding a new object.
+     *                        Can be a Movie, Showtime, or Showroom depending on the mode.
+     * @param pMovieManager the MovieManager instance for retrieving/persisting Movie data.
+     *                       Must not be null when mode involves movies.
+     * @param pShowtimeManager the ShowtimeManager instance for retrieving/persisting Showtime data.
+     *                          Must not be null when mode involves showtimes.
+     * @param pShowroomManager the ShowroomManager instance for retrieving/persisting Showroom data.
+     *                          Must not be null when mode involves showrooms.
+     * @see FormMode
+     * @see #setupUI()
+     * @see #populateChoiceBoxes()
+     * @see #populateFields()
      */
     public void initializeForm(FormMode pMode, Object pCurrentObject, MovieManager pMovieManager, ShowtimeManager pShowtimeManager, ShowroomManager pShowroomManager) {
         this.aMode = pMode;
@@ -114,7 +212,23 @@ public class AddEditController {
     }
     
     /**
-     * Sets up the UI by showing/hiding fields based on the current mode.
+     * Sets up the UI by showing and hiding fields based on the current operation mode.
+     * 
+     * <p>This method configures the visibility of all UI components to match the requirements
+     * of the current operation. It also sets appropriate labels and titles for each mode.</p>
+     * 
+     * <p>For each of the six FormModes:
+     * <ul>
+     *   <li>{@code ADD_MOVIE} - Shows only name field and title "Add Movie"</li>
+     *   <li>{@code EDIT_MOVIE} - Shows only name field and title "Edit Movie"</li>
+     *   <li>{@code ADD_SHOWTIME} - Shows movie, date, time, and room fields with title "Add Showtime"</li>
+     *   <li>{@code EDIT_SHOWTIME} - Shows movie, date, time, and room fields with title "Edit Showtime"</li>
+     *   <li>{@code ADD_ROOM} - Shows room number and capacity fields with title "Add Room"</li>
+     *   <li>{@code EDIT_ROOM} - Shows room number and capacity fields with title "Edit Room"</li>
+     * </ul>
+     * </p>
+     * 
+     * @see FormMode
      */
     private void setupUI() {
         switch (aMode) {
@@ -228,7 +342,27 @@ public class AddEditController {
     }
     
     /**
-     * Populates the ChoiceBoxes with data from the managers.
+     * Populates the choice boxes with data retrieved from the manager instances.
+     * 
+     * <p>This method loads the appropriate data into the choice boxes based on the current
+     * operation mode. Different modes require different data:
+     * <ul>
+     *   <li>Movie modes do not populate any choice boxes</li>
+     *   <li>Showtime modes populate:
+     *     <ul>
+     *       <li>Movie choice box with all available movies</li>
+     *       <li>Room choice box with all available showrooms</li>
+     *       <li>Showtime choice box with all available showtimes</li>
+     *     </ul>
+     *   </li>
+     *   <li>Room modes populate the room choice box with all available showrooms</li>
+     * </ul>
+     * </p>
+     * 
+     * <p>If a manager or its data collection is null or empty, that choice box is not populated,
+     * allowing graceful handling of missing data.</p>
+     * 
+     * @see #initializeForm(FormMode, Object, MovieManager, ShowtimeManager, ShowroomManager)
      */
     private void populateChoiceBoxes() {
         switch(aMode) {
@@ -255,7 +389,25 @@ public class AddEditController {
     }
     
     /**
-     * Pre-fills the form fields if editing an existing object.
+     * Pre-fills the form fields with data from the object being edited.
+     * 
+     * <p>This method only executes when in edit mode with a non-null object. It extracts
+     * relevant data from the object and populates the corresponding UI fields so that
+     * the user sees the current values before making modifications.</p>
+     * 
+     * <p>Field population strategy:
+     * <ul>
+     *   <li>{@code EDIT_MOVIE} - Populates name field with the movie's name</li>
+     *   <li>{@code EDIT_SHOWTIME} - Populates movie choice, date picker, time field, and room choice</li>
+     *   <li>{@code EDIT_ROOM} - Populates room number and capacity fields as strings</li>
+     *   <li>Add modes - No fields are populated (form remains empty for new entries)</li>
+     * </ul>
+     * </p>
+     * 
+     * <p>Note: This method returns early if the current object is null, which is expected
+     * behavior for add modes.</p>
+     * 
+     * @see #initializeForm(FormMode, Object, MovieManager, ShowtimeManager, ShowroomManager)
      */
     private void populateFields() {
         if (aCurrentObject == null) {
@@ -284,7 +436,58 @@ public class AddEditController {
     
     
     /**
-     * Handles the Save button click event.
+     * Handles the Save button click event and processes the form data accordingly.
+     * 
+     * <p>This method implements the business logic for all six operation modes. It validates
+     * user input, creates or updates objects, persists changes through the appropriate manager,
+     * and provides user feedback via alerts.</p>
+     * 
+     * <p>Operation breakdown by mode:
+     * <ul>
+     *   <li>{@code ADD_MOVIE} - Validates name, creates new Movie, calls manager.addMovie()</li>
+     *   <li>{@code EDIT_MOVIE} - Validates name, updates existing Movie, changes persist through reference</li>
+     *   <li>{@code ADD_SHOWTIME} - Validates all selections, combines date/time into LocalDateTime,
+     *       creates new Showtime, calls manager.addShowtime()</li>
+     *   <li>{@code EDIT_SHOWTIME} - Validates all selections, updates existing Showtime properties
+     *       via setMovie(), setShowroom(), setDate(), setTime()</li>
+     *   <li>{@code ADD_ROOM} - Validates and parses room number and capacity, creates new Showroom,
+     *       calls manager.addShowroom()</li>
+     *   <li>{@code EDIT_ROOM} - Validates and parses room number and capacity, updates existing
+     *       Showroom via setRoomNumber() and setRoomCapacity()</li>
+     * </ul>
+     * </p>
+     * 
+     * <p>Error handling:
+     * <ul>
+     *   <li>{@link IllegalArgumentException} - Caught from model constructors/setters when data is invalid.
+     *       User sees appropriate error alert.</li>
+     *   <li>{@link NumberFormatException} - Caught when parsing room number/capacity strings.
+     *       User sees "Invalid Number" error alert.</li>
+     *   <li>{@link Exception} - Generic catch for time parsing failures. User sees "Parse Error" alert
+     *       with guidance on correct format ("HH:mm").</li>
+     * </ul>
+     * </p>
+     * 
+     * <p>Validation strategy:
+     * <ul>
+     *   <li>Text fields - Checked for empty strings after trimming whitespace</li>
+     *   <li>Choice boxes - Checked for null selection (value not chosen)</li>
+     *   <li>Date picker - Checked for null date selection</li>
+     *   <li>Time field - Parsed as LocalTime to validate "HH:mm" format</li>
+     *   <li>Number fields - Parsed to int to ensure valid numbers</li>
+     * </ul>
+     * </p>
+     * 
+     * <p>Success behavior:
+     * <ul>
+     *   <li>Displays success alert with appropriate message for the operation</li>
+     *   <li>Calls {@link #closeWindow()} to dismiss the form</li>
+     * </ul>
+     * </p>
+     * 
+     * @see FormMode
+     * @see AlertHelper
+     * @see #closeWindow()
      */
     @FXML
     private void handleSaveButtonClick() {
@@ -464,13 +667,33 @@ public class AddEditController {
     
     /**
      * Handles the Cancel button click event.
-     * Closes the window without saving any changes.
+     * 
+     * <p>This method is invoked when the user clicks the Cancel button. It closes the dialog
+     * window without saving any changes or modifications to the data.</p>
+     * 
+     * <p>Any unsaved changes in the form fields are discarded. The original object (if being edited)
+     * remains unchanged because updates only occur when the Save button is clicked and validation passes.</p>
+     * 
+     * @see #closeWindow()
      */
     @FXML
     private void handleCancelButtonClick() {
         closeWindow();
     }
 
+    /**
+     * Closes the current window (stage) containing this controller's form.
+     * 
+     * <p>This private helper method is called after successful save operations or when the
+     * user clicks Cancel. It retrieves the Stage from the Save button's scene graph and
+     * closes it, dismissing the dialog.</p>
+     * 
+     * <p>Implementation note: The Save button is used to access the stage because it is
+     * always available in all modes, making it a reliable reference point in the scene graph.</p>
+     * 
+     * @see #handleSaveButtonClick()
+     * @see #handleCancelButtonClick()
+     */
     private void closeWindow() {
         Stage stage = (Stage) aSaveButton.getScene().getWindow();
         stage.close();
