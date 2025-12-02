@@ -72,6 +72,10 @@ public class LogInViewController {
                 FXMLLoader loader = new FXMLLoader(MovieTheatreApplication.class.getResource("managerDashboard-view.fxml"));
                 Parent view = loader.load();
 
+                // Pass the enclosure to the new controller
+                ManagerDashboardController newEnclosureViewController = loader.getController();
+                newEnclosureViewController.setManager(this.MANAGER_ACCOUNT);
+
                 Stage nextStage = new Stage();
                 nextStage.setScene(new Scene(view));
                 nextStage.initModality(Modality.WINDOW_MODAL);

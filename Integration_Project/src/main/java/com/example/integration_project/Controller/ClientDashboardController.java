@@ -15,7 +15,9 @@ import com.example.integration_project.Model.ShowtimeManager;
 import com.example.integration_project.Model.Ticket;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.stage.Stage;
 
 public class ClientDashboardController {
 
@@ -35,10 +37,18 @@ public class ClientDashboardController {
 
     /** Showtime , Showroom */
     private final HashMap<Showtime, Showroom> aShowTimeRoom = new HashMap<>();
+    private Stage aStage;
+    @FXML
+    private Button aLogoutButton; //aLogoutButton
+
 
 
     @FXML
     private void initialize() {
+        aMovieManager = new MovieManager();
+        aShowroomManager = new ShowroomManager();
+        aShowtimeManager = new ShowtimeManager();
+        aMoviesListView = new ListView<>();
         aMoviesListView.setItems(aMovieManager.getMovies());
         setupMovieSelection();
         setupDetailSelection();
@@ -84,6 +94,7 @@ public class ClientDashboardController {
 
 
     private void setupDetailSelection() {
+        aDetailsListView = new ListView<>();
         aDetailsListView.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
             int index = newVal.intValue();
 
@@ -140,12 +151,21 @@ public class ClientDashboardController {
         loadPairsForMovie(aSelectedMovie);
     }
 
-    // Method to calculate remaining seats in Showroom at a given Showtime for a Movie
-    public int calculateRemainingSeats(Showroom showroom, Showtime showtime) {
-        // For simplicity, we assume the showroom's capacity is the total seats available
-        // In a real application, you would check booked tickets for that showtime
-        // and subtract from the showroom's capacity
-        int availableSeats = /** showroom.getCapacity() - showroom.getBookedSeats();  // to be done*/ showroom.getCapacity();
-        return availableSeats;
+//    // Method to calculate remaining seats in Showroom at a given Showtime for a Movie
+//    public int calculateRemainingSeats(Showroom showroom, Showtime showtime) {
+//        // For simplicity, we assume the showroom's capacity is the total seats available
+//        // In a real application, you would check booked tickets for that showtime
+//        // and subtract from the showroom's capacity
+//        int availableSeats = /** showroom.getCapacity() - showroom.getBookedSeats();  // to be done*/ showroom.getCapacity();
+//        return availableSeats;
+//    }
+
+    /**
+     * Closes the dashboard window (logout).
+     */
+    @FXML
+    private void onLogoutButtonClick() {
+        aStage = (Stage) aLogoutButton.getScene().getWindow();
+        aStage.close();
     }
 }
