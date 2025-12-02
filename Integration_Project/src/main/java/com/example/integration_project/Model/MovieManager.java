@@ -26,13 +26,31 @@ public class MovieManager {
      * Adds a movie to the collection.
      * 
      * @param movie the movie to add
-     * @throws IllegalArgumentException if movie is null
+     * @throws IllegalArgumentException if movie is null or already exists in the collection
      */
     public void addMovie(Movie movie) {
         if (movie == null) {
             throw new IllegalArgumentException("Movie cannot be null");
         }
+        if (movieExists(movie.getName())) {
+            throw new IllegalArgumentException("Movie \"" + movie.getName() + "\" already exists.");
+        }
         movies.add(movie);
+    }
+
+    /**
+     * Checks if a movie with the given name already exists in the collection.
+     * 
+     * @param movieName the name of the movie to check
+     * @return true if a movie with that name exists, false otherwise
+     */
+    public boolean movieExists(String movieName) {
+        for (Movie m : movies) {
+            if (m.getName().equalsIgnoreCase(movieName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

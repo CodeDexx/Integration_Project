@@ -68,4 +68,9 @@ public class Showroom {
         this.roomCapacity = roomCapacity;
     }
 
+    @Override
+    public String toString() {
+        return "Room " + roomNumber + " (Capacity: " + roomCapacity + ")";
+    }
+
 }
