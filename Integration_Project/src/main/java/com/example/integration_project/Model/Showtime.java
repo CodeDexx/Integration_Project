@@ -134,4 +134,9 @@ public class Showtime {
         }
     }
 
+    @Override
+    public String toString() {
+        return movie.getName() + " - " + showtime.toLocalDate() + " " + showtime.toLocalTime() + " (Room " + showroom.getRoomNumber() + ")";
+    }
+
 }

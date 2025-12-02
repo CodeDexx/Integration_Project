@@ -120,10 +120,6 @@ public class AddEditController {
     @FXML
     private DatePicker aDatePicker;
     
-    /** Choice box for selecting from a list of Showtimes (currently unused but retained for future use) */
-    @FXML
-    private ChoiceBox<Showtime> aShowtimeChoiceBox;
-    
     /** Choice box for selecting a Showroom when adding or editing a Showtime */
     @FXML
     private ChoiceBox<Showroom> aRoomChoiceBox;
@@ -147,10 +143,6 @@ public class AddEditController {
     /** Label for the date picker field */
     @FXML
     private Label aDateLabel;
-
-    /** Label for the showtime choice box field */
-    @FXML
-    private Label aShowtimeLabel;
 
     /** Label for the room choice box field */
     @FXML
@@ -238,13 +230,11 @@ public class AddEditController {
                 aMovieChoiceBox.setVisible(false);
                 aDatePicker.setVisible(false);
                 aTimeTextField.setVisible(false);
-                aShowtimeChoiceBox.setVisible(false);
                 aRoomChoiceBox.setVisible(false);
                 aNameLabel.setVisible(true);
                 aMovieLabel.setVisible(false);
                 aDateLabel.setVisible(false);
                 aTimeLabel.setVisible(false);
-                aShowtimeLabel.setVisible(false);
                 aRoomLabel.setVisible(false);
                 aCapacityLabel.setVisible(false);
                 aCapacityTextField.setVisible(false);
@@ -255,13 +245,11 @@ public class AddEditController {
                 aMovieChoiceBox.setVisible(false);
                 aDatePicker.setVisible(false);
                 aTimeTextField.setVisible(false);
-                aShowtimeChoiceBox.setVisible(false);
                 aRoomChoiceBox.setVisible(false);
                 aNameLabel.setVisible(true);
                 aMovieLabel.setVisible(false);
                 aDateLabel.setVisible(false);
                 aTimeLabel.setVisible(false);
-                aShowtimeLabel.setVisible(false);
                 aRoomLabel.setVisible(false);
                 aCapacityLabel.setVisible(false);
                 aCapacityTextField.setVisible(false);
@@ -272,13 +260,11 @@ public class AddEditController {
                 aMovieChoiceBox.setVisible(true);
                 aDatePicker.setVisible(true);
                 aTimeTextField.setVisible(true);
-                aShowtimeChoiceBox.setVisible(false);
                 aRoomChoiceBox.setVisible(true);
                 aNameLabel.setVisible(false);
                 aMovieLabel.setVisible(true);
                 aDateLabel.setVisible(true);
                 aTimeLabel.setVisible(true);
-                aShowtimeLabel.setVisible(false);
                 aRoomLabel.setVisible(true);
                 aCapacityLabel.setVisible(false);
                 aCapacityTextField.setVisible(false);
@@ -288,14 +274,12 @@ public class AddEditController {
                 aMovieChoiceBox.setVisible(true);
                 aDatePicker.setVisible(true);
                 aTimeTextField.setVisible(true);
-                aShowtimeChoiceBox.setVisible(false);
                 aRoomChoiceBox.setVisible(true);
                 aNameTextField.setVisible(false);
                 aNameLabel.setVisible(false);
                 aMovieLabel.setVisible(true);
                 aDateLabel.setVisible(true);
                 aTimeLabel.setVisible(true);
-                aShowtimeLabel.setVisible(false);
                 aRoomLabel.setVisible(true);
                 aCapacityLabel.setVisible(false);
                 aCapacityTextField.setVisible(false);
@@ -306,14 +290,12 @@ public class AddEditController {
                 aMovieChoiceBox.setVisible(false);
                 aDatePicker.setVisible(false);
                 aTimeTextField.setVisible(false);
-                aShowtimeChoiceBox.setVisible(false);
                 aRoomChoiceBox.setVisible(false);
                 aNameLabel.setText("Number");
                 aNameLabel.setVisible(true);
                 aMovieLabel.setVisible(false);
                 aDateLabel.setVisible(false);
                 aTimeLabel.setVisible(false);
-                aShowtimeLabel.setVisible(false);
                 aRoomLabel.setVisible(false);
                 aCapacityLabel.setVisible(true);
                 aCapacityTextField.setVisible(true);
@@ -324,14 +306,12 @@ public class AddEditController {
                 aMovieChoiceBox.setVisible(false);
                 aDatePicker.setVisible(false);
                 aTimeTextField.setVisible(false);
-                aShowtimeChoiceBox.setVisible(false);
                 aRoomChoiceBox.setVisible(false);
                 aNameLabel.setText("Number");
                 aNameLabel.setVisible(true);
                 aMovieLabel.setVisible(false);
                 aDateLabel.setVisible(false);
                 aTimeLabel.setVisible(false);
-                aShowtimeLabel.setVisible(false);
                 aRoomLabel.setVisible(false);
                 aCapacityLabel.setVisible(true);
                 aCapacityTextField.setVisible(true);
@@ -375,9 +355,6 @@ public class AddEditController {
             }
                 if (aShowroomManager != null && !aShowroomManager.getShowrooms().isEmpty()) {
                     aRoomChoiceBox.getItems().addAll(aShowroomManager.getShowrooms());
-                }
-                if (aShowtimeManager != null && !aShowtimeManager.getShowtimes().isEmpty()) {
-                    aShowtimeChoiceBox.getItems().addAll(aShowtimeManager.getShowtimes());
                 }
                 break;
             case ADD_ROOM, EDIT_ROOM:

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integration_project.Controller.AddEditController">
+   <children>
+      <Button fx:id="aSaveButton" layoutX="68.0" layoutY="296.0" mnemonicParsing="false" onAction="#handleSaveButtonClick" text="Save" />
+      <Button fx:id="aCancelButton" layoutX="285.0" layoutY="296.0" mnemonicParsing="false" onAction="#handleCancelButtonClick" text="Cancel" />
+      <DatePicker fx:id="aDatePicker" layoutX="126.0" layoutY="171.0" prefHeight="26.0" prefWidth="150.0" />
+      <TextField fx:id="aTimeTextField" layoutX="126.0" layoutY="210.0" prefHeight="26.0" prefWidth="150.0" promptText="HH:mm" />
+      <ChoiceBox fx:id="aMovieChoiceBox" layoutX="126.0" layoutY="131.0" prefWidth="150.0" />
+      <TextField fx:id="aNameTextField" layoutX="126.0" layoutY="131.0" />
+      <Label fx:id="aTitleLabel" layoutX="149.0" layoutY="61.0" text="Label" underline="true">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label fx:id="aNameLabel" layoutX="73.0" layoutY="135.0" text="Name" />
+      <Label fx:id="aMovieLabel" layoutX="72.0" layoutY="135.0" text="Movie" />
+      <Label fx:id="aDateLabel" layoutX="76.0" layoutY="175.0" text="Date" />
+      <Label fx:id="aTimeLabel" layoutX="76.0" layoutY="214.0" text="Time" />
+      <ChoiceBox fx:id="aRoomChoiceBox" layoutX="125.0" layoutY="246.0" prefWidth="150.0" />
+      <Label fx:id="aRoomLabel" layoutX="73.0" layoutY="250.0" text="Room" />
+      <TextField fx:id="aCapacityTextField" layoutX="126.0" layoutY="171.0" />
+      <Label fx:id="aCapacityLabel" layoutX="66.0" layoutY="176.0" text="Capacity" />
+   </children>
+</AnchorPane>

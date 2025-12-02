@@ -54,7 +54,7 @@ public class User {
      *
      * @return the email address of the user
      */
-    String getEmailAddress() {
+    public String getEmailAddress() {
         return this.aEmail;
     }
 
@@ -63,7 +63,7 @@ public class User {
      *
      * @return the password of the user
      */
-    String getPassword() {
+    public String getPassword() {
         return this.aPassword;
     }
 

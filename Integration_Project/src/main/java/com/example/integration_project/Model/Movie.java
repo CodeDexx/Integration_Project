@@ -42,4 +42,9 @@ public class Movie {
         this.movieName = movieName.trim();
     }
 
+    @Override
+    public String toString() {
+        return movieName;
+    }
+
 }
