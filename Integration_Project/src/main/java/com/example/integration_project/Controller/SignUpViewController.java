@@ -9,22 +9,27 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class SignUpViewController {
 
     @FXML
     private TextField nameTextField;
+
     @FXML
     private TextField passwordTextField;
+
     @FXML
     private TextField emailTextField;
+
     @FXML
     private Button saveButton;
 
 
     @FXML
     private void onSaveButtonClick() {
+
         String name = nameTextField.getText();
         String password = passwordTextField.getText();
         String email = emailTextField.getText();
@@ -37,7 +42,7 @@ public class SignUpViewController {
         try {
             User user = new User(name, password, email);
 
-            AlertHelper.showInfoAlert("Accpunt Created", "Successfully Created User","Your account has been created successfully");
+            AlertHelper.showInfoAlert("Account Created", "User Successfully Created","Your account has been created successfully");
 
             returnToClientDashboard();
         } catch (Exception e) {
@@ -50,10 +55,13 @@ public class SignUpViewController {
             FXMLLoader loader = new FXMLLoader(MovieTheatreApplication.class.getResource("clientDashboard-view.fxml"));
             Parent view = loader.load();
 
-            Stage stage = (Stage) saveButton.getScene().getWindow();
-            stage.setScene(new Scene(view));
-            stage.setTitle("Client Dashboard");
-            stage.show();
+
+            Stage nextStage = new Stage();
+            nextStage.setScene(new Scene(view));
+            nextStage.initModality(Modality.WINDOW_MODAL);
+            nextStage.initOwner(saveButton.getScene().getWindow());
+            nextStage.showAndWait();
+
         }  catch (Exception e) {
             AlertHelper.showErrorAlert("Error", "Could not open the client Dashboard", e.getMessage());
         }

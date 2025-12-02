@@ -9,9 +9,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ *
+ */
+
 public class LogInViewController {
+
     private final Manager MANAGER_ACCOUNT = new Manager("manager@grandview.ca", "Fall2025");
 
     @FXML
@@ -46,10 +52,11 @@ public class LogInViewController {
                 FXMLLoader loader = new FXMLLoader(MovieTheatreApplication.class.getResource("managerDashboard-view.fxml"));
                 Parent view = loader.load();
 
-                Stage stage = (Stage) loginButton.getScene().getWindow();
-                stage.setScene(new Scene(view));
-                stage.setTitle("Manager Dashboard");
-                stage.show();
+                Stage nextStage = new Stage();
+                nextStage.setScene(new Scene(view));
+                nextStage.initModality(Modality.WINDOW_MODAL);
+                nextStage.initOwner(loginButton.getScene().getWindow());
+                nextStage.showAndWait();
 
             } catch (Exception e) {
                 AlertHelper.showErrorAlert("Load Error", "Could not load Manager Dashboard", e.getMessage());
@@ -66,10 +73,11 @@ public class LogInViewController {
             FXMLLoader loader = new FXMLLoader(MovieTheatreApplication.class.getResource("signup-view.fxml"));
             Parent view = loader.load();
 
-            Stage stage = (Stage) signupButton.getScene().getWindow();
-            stage.setScene(new Scene(view));
-            stage.setTitle("Sign Up");
-            stage.show();
+            Stage nextStage = new Stage();
+            nextStage.setScene(new Scene(view));
+            nextStage.initModality(Modality.WINDOW_MODAL);
+            nextStage.initOwner(signupButton.getScene().getWindow());
+            nextStage.showAndWait();
 
         } catch (Exception e) {
             AlertHelper.showErrorAlert("Load Error", "Could not load Sign Up view", e.getMessage());
