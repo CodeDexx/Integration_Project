@@ -48,10 +48,13 @@ import javafx.stage.Stage;
 
 public class ManagerDashboardController {
 
+    /// TODO Ticket number tickets sold per showtime and per movie
+    /// Consult the number of tickets sold by showtime and by movie
     public enum DashboardView {
         MOVIES,
         SHOWTIME,
-        SHOWROOMS
+        SHOWROOMS,
+        TICKETS
     }
     /** Label that displays the page title (set dynamically to the current view) */
     @FXML
