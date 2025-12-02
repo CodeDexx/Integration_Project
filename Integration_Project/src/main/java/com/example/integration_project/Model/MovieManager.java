@@ -11,8 +11,20 @@ import javafx.collections.ObservableList;
  * @version 1.0
  */
 public class MovieManager {
-    private final ObservableList<Movie> movies = FXCollections.observableArrayList();
+    private final ObservableList<Movie> movies;
 
+    private static MovieManager aInstance;
+
+    private MovieManager() {
+        movies = FXCollections.observableArrayList();
+    }
+
+    public static MovieManager getMovieManagerInstance() {
+        if (aInstance == null) {
+            aInstance = new MovieManager();
+        }
+        return aInstance;
+    }
     /**
      * Gets the list of all movies.
      * 

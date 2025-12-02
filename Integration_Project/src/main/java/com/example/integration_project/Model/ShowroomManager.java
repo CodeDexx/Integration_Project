@@ -11,8 +11,20 @@ import javafx.collections.ObservableList;
  * @version 1.0
  */
 public class ShowroomManager {
-    private final ObservableList<Showroom> showrooms = FXCollections.observableArrayList();
+    private final ObservableList<Showroom> showrooms;
 
+    private static ShowroomManager aInstance;
+
+    private ShowroomManager() {
+        showrooms = FXCollections.observableArrayList();
+    }
+
+    public static ShowroomManager getShowroomManagerInstance() {
+        if (aInstance == null) {
+            aInstance = new ShowroomManager();
+        }
+        return aInstance;
+    }
     /**
      * Gets the list of all showrooms.
      * 
