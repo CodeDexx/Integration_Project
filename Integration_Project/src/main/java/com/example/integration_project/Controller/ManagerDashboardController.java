@@ -311,7 +311,7 @@ public class ManagerDashboardController {
      * @throws IOException if the FXML cannot be loaded
      */
     private void openAddEditView(AddEditController.FormMode pMode, Object pObject) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/integration_project/add_edit-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/integration_project/add-edit-view.fxml"));
         Parent root = loader.load();
 
         // Retrieve controller and call initializeForm(...)
