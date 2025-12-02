@@ -13,32 +13,52 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
+ * Controller class for the Login View
+ * <p>
+ *     This class handles user interactions from the login interface, including authentication,
+ *     navigation to the sign-up view, and returning to the previous view.
+ * </p>
+ * <p>Only the manager account is supported for administrative login</p>
  *
+ * @author Emmanuelle
  */
 
 public class LogInViewController {
 
+    /** Hardcoded manager account used for authentication. */
     private final Manager MANAGER_ACCOUNT = new Manager("manager@grandview.ca", "Fall2025");
 
+    /** TextField for entering the user's email. */
     @FXML
-    private TextField emailTextField;
+    private TextField aEmailTextField;
 
+    /** TextField for entering the user's password. */
     @FXML
-    private TextField passwordTextField;
+    private TextField aPasswordTextField;
 
+    /** Button that triggers the login process. */
     @FXML
-    private Button loginButton;
+    private Button aLoginButton;
 
+    /** Button to close the current login window. */
     @FXML
-    private Button backButton;
+    private Button aBackButton;
 
+    /** Button used to open the account sign-up view. */
     @FXML
-    private Button signupButton;
+    private Button aSignupButton;
 
+    /**
+     * Handles the login action when the "log In" button is clicked.
+     * <p>
+     *     Validates that both email and password fields are filled.
+     *     If credentials are valid, the Manager Dashboard view is loaded in a modal window.
+     * </p>
+     */
     @FXML
     private void onLoginButtonClick() {
-        String email = emailTextField.getText();
-        String password = passwordTextField.getText();
+        String email = aEmailTextField.getText();
+        String password = aPasswordTextField.getText();
 
         if (email.isEmpty() || password.isEmpty()) {
             AlertHelper.showErrorAlert("Login Error",
@@ -55,7 +75,7 @@ public class LogInViewController {
                 Stage nextStage = new Stage();
                 nextStage.setScene(new Scene(view));
                 nextStage.initModality(Modality.WINDOW_MODAL);
-                nextStage.initOwner(loginButton.getScene().getWindow());
+                nextStage.initOwner(aLoginButton.getScene().getWindow());
                 nextStage.showAndWait();
 
             } catch (Exception e) {
@@ -67,6 +87,13 @@ public class LogInViewController {
         }
     }
 
+    /**
+     * Opens the Sign-Up view when the "Sign Up" button is clicked.
+     * <p>
+     *     The sign-up view opens as a modal window.
+     *     If when opening the sign-up view the loading fails, an error alert is displayed.
+     * </p>
+     */
     @FXML
     private void onSignupButtonClick() {
         try {
@@ -76,7 +103,7 @@ public class LogInViewController {
             Stage nextStage = new Stage();
             nextStage.setScene(new Scene(view));
             nextStage.initModality(Modality.WINDOW_MODAL);
-            nextStage.initOwner(signupButton.getScene().getWindow());
+            nextStage.initOwner(aSignupButton.getScene().getWindow());
             nextStage.showAndWait();
 
         } catch (Exception e) {
@@ -84,9 +111,15 @@ public class LogInViewController {
         }
     }
 
+    /**
+     * Closes the current login window when the "Back" button is clicked.
+     * <p>
+     *     This method simply closes the current stage.
+     * </p>
+     */
     @FXML
     private void onBackButtonClick() {
-        Stage stage = (Stage) backButton.getScene().getWindow();
+        Stage stage = (Stage) aBackButton.getScene().getWindow();
         stage.close();
     }
 }

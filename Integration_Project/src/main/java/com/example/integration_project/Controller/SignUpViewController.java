@@ -12,27 +12,50 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * Controller for the Sign-Up view
+ * <p>
+ *     This controller is responsible for handling the creation of a new user account, validating the input field,
+ *     displaying feedback using alerts, and transitioning the user to the Client Dashboard upon successful creation.
+ * </p>
+ * <p>
+ *     No permanent user-storage is implemented, accounts are only created temporarily during runtime.
+ * </p>
+ *
+ * @author Emmanuelle
+ */
 public class SignUpViewController {
 
+    /** TextField where the user enters their name. */
     @FXML
-    private TextField nameTextField;
+    private TextField aNameTextField;
 
+    /** TextField where the user enters their password. */
     @FXML
-    private TextField passwordTextField;
+    private TextField aPasswordTextField;
 
+    /** TextField where the user enters their email address. */
     @FXML
-    private TextField emailTextField;
+    private TextField aEmailTextField;
 
+    /** aSaveButton saves the account created. */
     @FXML
-    private Button saveButton;
+    private Button aSaveButton;
 
-
+    /**
+     * Handles the event when the "Save" button is clicked.
+     * <p>
+     *     This method collects user input, validates that all the fields are filled, creates a new {@link User},
+     *     and displays alerts based on the success or failure of the process.
+     * </p>
+     * <p>On success, this method redirects the user to the Client Dashboard.</p>
+     */
     @FXML
     private void onSaveButtonClick() {
 
-        String name = nameTextField.getText();
-        String password = passwordTextField.getText();
-        String email = emailTextField.getText();
+        String name = aNameTextField.getText();
+        String password = aPasswordTextField.getText();
+        String email = aEmailTextField.getText();
 
         if (name.isEmpty() || password.isEmpty() || email.isEmpty()) {
             AlertHelper.showErrorAlert("Missing Information", "Incomplete Form", "Please in all the fields.");
@@ -40,7 +63,7 @@ public class SignUpViewController {
         }
 
         try {
-            User user = new User(name, password, email);
+            new User(name, password, email);
 
             AlertHelper.showInfoAlert("Account Created", "User Successfully Created","Your account has been created successfully");
 
@@ -50,6 +73,14 @@ public class SignUpViewController {
         }
     }
 
+    /**
+     * Loads and display the "Client Dashboard" view after a successful sign-up.
+     * <p>
+     *     This method opens the dashboard as a modal window, blocking the sign-up window
+     *     until the user finishes interacting with the dashboard.
+     * </p>
+     * <p>If loading fails, an error alert is shown to the user.</p>
+     */
     private void returnToClientDashboard() {
         try {
             FXMLLoader loader = new FXMLLoader(MovieTheatreApplication.class.getResource("clientDashboard-view.fxml"));
@@ -59,7 +90,7 @@ public class SignUpViewController {
             Stage nextStage = new Stage();
             nextStage.setScene(new Scene(view));
             nextStage.initModality(Modality.WINDOW_MODAL);
-            nextStage.initOwner(saveButton.getScene().getWindow());
+            nextStage.initOwner(aSaveButton.getScene().getWindow());
             nextStage.showAndWait();
 
         }  catch (Exception e) {
