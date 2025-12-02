@@ -79,4 +79,14 @@ public class User {
         }
         this.aPassword = pPassword;
     }
+
+    /**
+     * Returns the user's name.
+     *
+     * @return the name of the user
+     */
+    String getName() {
+        return this.aName;
+    }
+
 }
