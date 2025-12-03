@@ -4,13 +4,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import com.example.integration_project.Helpers.AlertHelper;
-import com.example.integration_project.Helpers.ImportHelper;
+import com.example.integration_project.Helpers.*;
 import com.example.integration_project.Model.*;
 
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -49,7 +51,6 @@ public class ClientDashboardController {
         aMovieManager = MovieManager.getMovieManagerInstance();
         aShowroomManager = ShowroomManager.getShowroomManagerInstance();
         aShowtimeManager = ShowtimeManager.getShowtimeManagerInstance();
-
         aMoviesListView.setItems(aMovieManager.getMovies());
         ImportHelper.loadShowtime(aMovieManager.getMovies(), aShowroomManager.getShowrooms());
 

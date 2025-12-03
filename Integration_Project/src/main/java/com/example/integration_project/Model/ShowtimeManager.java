@@ -11,7 +11,7 @@ import javafx.collections.ObservableList;
  * @version 1.0
  */
 public class ShowtimeManager {
-    private final ObservableList<Showtimes> showtime;
+    private static ObservableList<Showtimes> showtime;
 
     private static ShowtimeManager aInstance;
 
@@ -31,7 +31,7 @@ public class ShowtimeManager {
      * 
      * @return an ObservableList containing all showtimes
      */
-    public ObservableList<Showtimes> getShowtimes() {
+    public static ObservableList<Showtimes> getShowtimes() {
         return showtime;
     }
 
