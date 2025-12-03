@@ -9,13 +9,7 @@ import java.util.UUID;
 
 import com.example.integration_project.Helpers.AlertHelper;
 import com.example.integration_project.Helpers.ImportHelper;
-import com.example.integration_project.Model.Movie;
-import com.example.integration_project.Model.MovieManager;
-import com.example.integration_project.Model.Showroom;
-import com.example.integration_project.Model.ShowroomManager;
-import com.example.integration_project.Model.Showtime;
-import com.example.integration_project.Model.ShowtimeManager;
-import com.example.integration_project.Model.Ticket;
+import com.example.integration_project.Model.*;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -55,6 +49,7 @@ public class ClientDashboardController {
         aMovieManager = MovieManager.getMovieManagerInstance();
         aShowroomManager = ShowroomManager.getShowroomManagerInstance();
         aShowtimeManager = ShowtimeManager.getShowtimeManagerInstance();
+
         aMoviesListView.setItems(aMovieManager.getMovies());
         ImportHelper.loadShowtime(aMovieManager.getMovies(), aShowroomManager.getShowrooms());
 
@@ -137,6 +132,9 @@ public class ClientDashboardController {
                     aSelectedShowtime.toString(),
                     LocalDateTime.now()
             );
+
+            // Add the ticket to TicketManager
+            TicketManager.getInstance().addTicket(ticket);
 
             // Show ticket notification
             AlertHelper.showInfoAlert("Booking Confirmed", "Your ticket is ready!", ticket.toString());
