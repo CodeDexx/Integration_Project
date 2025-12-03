@@ -15,7 +15,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.List;
-
 /**
  * Controller class for the Login View
  * <p>
@@ -31,9 +30,6 @@ public class LogInViewController {
 
     /** Hardcoded manager account used for authentication. */
     private final Manager MANAGER_ACCOUNT = new Manager("manager@grandview.ca", "Fall2025");
-
-    /** List of clients from ImportHelper */
-    private final List<Client> aClientList = ImportHelper.loadClients();
 
     /** TextField for entering the user's email. */
     @FXML
@@ -55,20 +51,12 @@ public class LogInViewController {
     @FXML
     private Button aSignupButton;
 
-    /** Sets the signup button to the text "Create an account" if the client has no account */
-    @FXML
-    private void initialize() {
-        aSignupButton.setText("Create Account");
-    }
-
     /**
      * Handles the login action when the "log In" button is clicked.
      * <p>
      *     Validates that both email and password fields are filled.
      *     If credentials are valid, the Manager Dashboard view is loaded in a modal window.
      * </p>
-     * <p> If the client already has an account, the for loop goes through the clients in the {@link ImportHelper},
-     * and logs him/her in and the Client Dashboard is displayed in a modal window</p>
      */
     @FXML
     private void onLoginButtonClick() {
@@ -82,59 +70,59 @@ public class LogInViewController {
         }
 
         if (email.equals(MANAGER_ACCOUNT.getEmailAddress()) && password.equals(MANAGER_ACCOUNT.getPassword())) {
-            openView("managerDashboard-view.fxml");
-            return;
-        }
 
-        Client foundClient = null;
+            try {
+                FXMLLoader loader = new FXMLLoader(MovieTheatreApplication.class.getResource("managerDashboard-view.fxml"));
+                Parent view = loader.load();
 
-        for (Client client : aClientList) {
-            if (email.equals(client.getEmailAddress()) && password.equals(client.getPassword())) {
-                foundClient = client;
-                break;
+                Stage nextStage = new Stage();
+                nextStage.setScene(new Scene(view));
+                nextStage.initModality(Modality.WINDOW_MODAL);
+                nextStage.initOwner(aLoginButton.getScene().getWindow());
+                nextStage.showAndWait();
+
+            } catch (Exception e) {
+                AlertHelper.showErrorAlert("Load Error", "Could not load Manager Dashboard", e.getMessage());
             }
         }
-
-        if (foundClient != null) {
-            openView("clientDashboard-view.fxml");
+        else {
+            AlertHelper.showErrorAlert("Login Failed", "Incorrect Credentials", "The email or password is incorrect.");
         }
-
-        //AlertHelper.showErrorAlert("Login Failed", "Incorrect Email or Password", "Please enter a valid email or password.");
     }
 
     /**
      * Opens the Sign-Up view when the "Sign Up" button is clicked.
+     * <p>
+     *     The sign-up view opens as a modal window.
+     *     If when opening the sign-up view the loading fails, an error alert is displayed.
+     * </p>
      */
     @FXML
     private void onSignupButtonClick() {
-        openView("signup-view.fxml");
-    }
-
-    /**
-     * Closes the current login window when the "Back" button is clicked.
-     */
-    @FXML
-    private void onBackButtonClick() {
-        Stage stage = (Stage) aBackButton.getScene().getWindow();
-        stage.close();
-    }
-
-    /**
-     * openView method loads any view and if the loading fails, an error alert is displayed.
-     */
-    private void openView(String viewName) {
         try {
-            FXMLLoader loader = new FXMLLoader(MovieTheatreApplication.class.getResource(viewName));
+            FXMLLoader loader = new FXMLLoader(MovieTheatreApplication.class.getResource("signup-view.fxml"));
             Parent view = loader.load();
 
             Stage nextStage = new Stage();
             nextStage.setScene(new Scene(view));
             nextStage.initModality(Modality.WINDOW_MODAL);
-            nextStage.initOwner(aLoginButton.getScene().getWindow());
+            nextStage.initOwner(aSignupButton.getScene().getWindow());
             nextStage.showAndWait();
 
         } catch (Exception e) {
-            AlertHelper.showErrorAlert("Error", "Could not load the page" + viewName, e.getMessage());
+            AlertHelper.showErrorAlert("Load Error", "Could not load Sign Up view", e.getMessage());
         }
+    }
+
+    /**
+     * Closes the current login window when the "Back" button is clicked.
+     * <p>
+     *     This method simply closes the current stage.
+     * </p>
+     */
+    @FXML
+    private void onBackButtonClick() {
+        Stage stage = (Stage) aBackButton.getScene().getWindow();
+        stage.close();
     }
 }

@@ -30,11 +30,11 @@ public class ClientDashboardController {
     private ShowroomManager aShowroomManager;// = ShowroomManager.getShowrooms();
 
     private Movie aSelectedMovie;
-    private Showtimes aSelectedShowtime;
-    private Showrooms aSelectedShowroom;
+    private Showtime aSelectedShowtime;
+    private Showroom aSelectedShowroom;
 
     /** Showtime , Showroom */
-    private final HashMap<Showtimes, Showrooms> aShowTimeRoom = new HashMap<>();
+    private final HashMap<Showtime, Showroom> aShowTimeRoom = new HashMap<>();
 
 
     @FXML
@@ -62,15 +62,15 @@ public class ClientDashboardController {
         if (movie == null) return;
 
         List<Movie> movies = aMovieManager.getMovies();
-        List<Showtimes> showtimes = aShowtimeManager.getShowtimes();
-        List<Showrooms> showrooms = aShowroomManager.getShowrooms();
+        List<Showtime> showtimes = aShowtimeManager.getShowtimes();
+        List<Showroom> showrooms = aShowroomManager.getShowrooms();
 
         for (int i = 0; i < movies.size(); i++) {
             if (!movies.get(i).getName().equals(movie.getName()))
                 continue;
 
-            Showtimes showtime = showtimes.get(i);
-            Showrooms sr = showrooms.get(i);
+            Showtime showtime = showtimes.get(i);
+            Showroom sr = showrooms.get(i);
 
             aShowTimeRoom.put(showtime, sr);
 
@@ -93,8 +93,8 @@ public class ClientDashboardController {
                 return;
             }
 
-            Showtimes st = aShowTimeRoom.keySet().stream().toList().get(index);
-            Showrooms sr = aShowTimeRoom.get(st);
+            Showtime st = aShowTimeRoom.keySet().stream().toList().get(index);
+            Showroom sr = aShowTimeRoom.get(st);
 
             aSelectedShowtime = st;
             aSelectedShowroom = sr;
@@ -141,7 +141,7 @@ public class ClientDashboardController {
     }
 
     // Method to calculate remaining seats in Showroom at a given Showtime for a Movie
-    public int calculateRemainingSeats(Showrooms showroom, Showtimes showtime) {
+    public int calculateRemainingSeats(Showroom showroom, Showtime showtime) {
         // For simplicity, we assume the showroom's capacity is the total seats available
         // In a real application, you would check booked tickets for that showtime
         // and subtract from the showroom's capacity
