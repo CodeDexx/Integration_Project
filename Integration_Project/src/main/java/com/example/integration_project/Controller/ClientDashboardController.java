@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.example.integration_project.Helpers.AlertHelper;
+import com.example.integration_project.Helpers.ImportHelper;
 import com.example.integration_project.Model.Movie;
 import com.example.integration_project.Model.MovieManager;
 import com.example.integration_project.Model.Showroom;
@@ -27,9 +28,9 @@ public class ClientDashboardController {
     @FXML
     private ListView<String> aDetailsListView;
 
-    private MovieManager aMovieManager;// = MovieManager.getMovies();
-    private ShowtimeManager aShowtimeManager; //= ShowtimeManager.getShowtimes();
-    private ShowroomManager aShowroomManager;// = ShowroomManager.getShowrooms();
+    private MovieManager aMovieManager;
+    private ShowtimeManager aShowtimeManager;
+    private ShowroomManager aShowroomManager;
 
     private Movie aSelectedMovie;
     private Showtime aSelectedShowtime;
@@ -42,18 +43,18 @@ public class ClientDashboardController {
     private Button aLogoutButton; //aLogoutButton
 
 
-
     @FXML
     private void initialize() {
-        aMovieManager = new MovieManager();
-        aShowroomManager = new ShowroomManager();
-        aShowtimeManager = new ShowtimeManager();
-        aMoviesListView = new ListView<>();
+        ImportHelper.loadMovies();
+        ImportHelper.loadShowrooms();
+
+        aMovieManager = MovieManager.getMovieManagerInstance();
+        aShowroomManager = ShowroomManager.getShowroomManagerInstance();
+        aShowtimeManager = ShowtimeManager.getShowtimeManagerInstance();
         aMoviesListView.setItems(aMovieManager.getMovies());
         setupMovieSelection();
         setupDetailSelection();
     }
-
 
     private void setupMovieSelection() {
         aMoviesListView.getSelectionModel().selectedItemProperty().addListener((obs, oldMovie, newMovie) -> {
@@ -79,7 +80,7 @@ public class ClientDashboardController {
             if (!movies.get(i).getName().equals(movie.getName()))
                 continue;
 
-            Showtime showtime = showtimes.get(i);
+            Showtime showtime = showtimes.get(i); // to be checked
             Showroom sr = showrooms.get(i);
 
             aShowTimeRoom.put(showtime, sr);
@@ -112,8 +113,6 @@ public class ClientDashboardController {
         });
     }
 
-
-
     @FXML
     private void onBookButtonClick() {
 
@@ -126,15 +125,6 @@ public class ClientDashboardController {
             AlertHelper.showErrorAlert("Booking Error", "Selection Missing", "Select a showtime and showroom.");
             return;
         }
-
-        /** Check seat availability
-        if (aSelectedShowroom.getRemainingSeats() <= 0) {
-            AlertHelper.showErrorAlert("Sold Out", "No seats left", "Please choose a different showtime.");
-            return;
-        }
-        */
-        // Reduce seat
-        //aSelectedShowroom.reduceOneSeat();
 
         // Generate Ticket
         Ticket ticket = new Ticket(

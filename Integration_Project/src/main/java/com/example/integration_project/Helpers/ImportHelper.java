@@ -1,9 +1,6 @@
 package com.example.integration_project.Helpers;
 
-import com.example.integration_project.Model.Movie;
-import com.example.integration_project.Model.Showroom;
-import com.example.integration_project.Model.Showtime;
-import com.example.integration_project.Model.Client;
+import com.example.integration_project.Model.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -41,36 +38,32 @@ public class ImportHelper {
     // -------------------------------------------------------------
     // MOVIES
     // -------------------------------------------------------------
-    public static List<Movie> loadMovies() {
-        List<Movie> movies = new ArrayList<>();
+    public static void loadMovies() {
+        MovieManager  movieManagerInstance = MovieManager.getMovieManagerInstance();
 
-        movies.add(new Movie("SpiderMan"));
-        movies.add(new Movie("The Matrix"));
-        movies.add(new Movie("Barbie"));
-
-        return movies;
+        movieManagerInstance.addMovie(new Movie("SpiderMan"));
+        movieManagerInstance.addMovie(new Movie("The Matrix"));
+        movieManagerInstance.addMovie(new Movie("Barbie"));
     }
 
     // -------------------------------------------------------------
     // SHOWROOMS
     // -------------------------------------------------------------
-    public static List<Showroom> loadShowrooms() {
-        List<Showroom> rooms = new ArrayList<>();
+    public static void loadShowrooms() {
+        ShowroomManager  rooms = ShowroomManager.getShowroomManagerInstance();
 
-        rooms.add(new Showroom(101, 15));
-        rooms.add(new Showroom(102, 19));
-        rooms.add(new Showroom(103, 20));
-        rooms.add(new Showroom(104, 21));
-        rooms.add(new Showroom(105, 22));
-
-        return rooms;
+        rooms.addShowroom(new Showroom(101, 15));
+        rooms.addShowroom(new Showroom(102, 19));
+        rooms.addShowroom(new Showroom(103, 20));
+        rooms.addShowroom(new Showroom(104, 21));
+        rooms.addShowroom(new Showroom(105, 22));
     }
 
     // -------------------------------------------------------------
     // SHOWTIME — rewritten for LocalDateTime compatibility
     // -------------------------------------------------------------
     public static List<Showtime> loadShowtime(List<Movie> movies, List<Showroom> rooms) {
-        List<Showtime> showtime = new ArrayList<>();
+        ShowtimeManager showtime = ShowtimeManager.getShowtimeManagerInstance();
 
         // Lookup helpers
         Movie spiderman = findMovie(movies, "SpiderMan");
@@ -95,20 +88,20 @@ public class ImportHelper {
         };
 
         // Spider-Man showtimes
-        showtime.add(new Showtime(spiderman, buildDateTime.apply("11/20/2025", "10:30 AM"), r101));
-        showtime.add(new Showtime(spiderman, buildDateTime.apply("11/21/2025", "11:30 AM"), r101));
-        showtime.add(new Showtime(spiderman, buildDateTime.apply("11/22/2025", "12:30 PM"), r101));
-        showtime.add(new Showtime(spiderman, buildDateTime.apply("11/23/2025", "1:30 PM"), r101));
+        showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("11/20/2025", "10:30 AM"), r101));
+        showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("11/21/2025", "11:30 AM"), r101));
+        showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("11/22/2025", "12:30 PM"), r101));
+        showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("11/23/2025", "1:30 PM"), r101));
 
         // Matrix showtimes
-        showtime.add(new Showtime(matrix, buildDateTime.apply("11/24/2025", "10:30 AM"), r102));
-        showtime.add(new Showtime(matrix, buildDateTime.apply("11/24/2025", "11:30 AM"), r103));
-        showtime.add(new Showtime(matrix, buildDateTime.apply("11/24/2025", "12:30 PM"), r104));
+        showtime.addShowtime(new Showtime(matrix, buildDateTime.apply("11/24/2025", "10:30 AM"), r102));
+        showtime.addShowtime(new Showtime(matrix, buildDateTime.apply("11/24/2025", "11:30 AM"), r103));
+        showtime.addShowtime(new Showtime(matrix, buildDateTime.apply("11/24/2025", "12:30 PM"), r104));
 
         // Barbie showtime
-        showtime.add(new Showtime(barbie, buildDateTime.apply("11/25/2025", "1:30 PM"), r105));
+        showtime.addShowtime(new Showtime(barbie, buildDateTime.apply("11/25/2025", "1:30 PM"), r105));
 
-        return showtime;
+        return showtime.getShowtimes();
     }
 
     // -------------------------------------------------------------
