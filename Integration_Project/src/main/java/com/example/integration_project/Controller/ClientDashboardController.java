@@ -69,7 +69,6 @@ public class ClientDashboardController {
         });
     }
 
-
     private void loadPairsForMovie(Movie movie) {
         aDetailsListView.getItems().clear();
         aShowtimeList.clear();
@@ -95,7 +94,6 @@ public class ClientDashboardController {
                 );
             }
         }
-    }
 
         if (aDetailsListView.getItems().isEmpty()) {
             aDetailsListView.getItems().add("No showtimes available for this movie.");
@@ -103,7 +101,6 @@ public class ClientDashboardController {
     }
 
     private void setupDetailSelection() {
-        aDetailsListView = new ListView<>();
         aDetailsListView.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
             int index = newVal.intValue();
             if (index < 0 || index >= aShowtimeList.size()) {
@@ -152,22 +149,6 @@ public class ClientDashboardController {
         }
     }
 
-    
-
-        // Generate Ticket
-        Ticket ticket = new Ticket(
-                UUID.randomUUID().toString(),
-                aSelectedMovie.getName(),
-                aSelectedShowtime.toString(),  // Showtime as String  // to be formatted
-                LocalDate.now()
-        );
-
-        // Show ticket notification
-        AlertHelper.showInfoAlert("Booking Confirmed", "Your ticket is ready!", ticket.toString());
-
-        // Refresh View
-        loadPairsForMovie(aSelectedMovie);
-    }
     public int calculateRemainingSeats(Showroom showroom, Showtime showtime) {
         int booked = showroom.getBookedSeats(showtime);
         return showroom.getCapacity() - booked;
