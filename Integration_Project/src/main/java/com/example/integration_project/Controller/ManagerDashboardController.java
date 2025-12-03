@@ -1,17 +1,13 @@
 package com.example.integration_project.Controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import com.example.integration_project.Helpers.AlertHelper;
 import com.example.integration_project.Helpers.ImportHelper;
-import com.example.integration_project.Model.Movie;
-import com.example.integration_project.Model.MovieManager;
-import com.example.integration_project.Model.Showrooms;
-import com.example.integration_project.Model.ShowroomManager;
-import com.example.integration_project.Model.Showtimes;
-import com.example.integration_project.Model.ShowtimeManager;
-import com.example.integration_project.Model.Manager;
+import com.example.integration_project.Model.*;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -83,9 +80,9 @@ public class ManagerDashboardController {
     private Object aSelectedItem;
 
     /** Managers for each domain type; instantiated here but can be injected if desired */
-    private MovieManager aMovieManager;//= MovieManager.getMovieManagerInstance();
-    private ShowtimeManager aShowtimeManager; //= ShowtimeManager.getShowtimeManagerInstance();
-    private ShowroomManager aShowroomManager;// = ShowroomManager.getShowroomManagerInstance();
+    private MovieManager aMovieManager;
+    private ShowtimeManager aShowtimeManager;
+    private ShowroomManager aShowroomManager;
 
     /**
      * JavaFX initialize method. Sets up selection listener and refreshes initial view.
@@ -93,14 +90,21 @@ public class ManagerDashboardController {
      */
     @FXML
     private void initialize() {
-        ImportHelper.loadMovies();
-        ImportHelper.loadShowrooms();
-        aMovieManager = MovieManager.getMovieManagerInstance();
-        aShowroomManager = ShowroomManager.getShowroomManagerInstance();
-        aShowtimeManager = ShowtimeManager.getShowtimeManagerInstance();
+        try{
+            ImportHelper.loadMovies();
+            ImportHelper.loadShowrooms();
+            aMovieManager = MovieManager.getMovieManagerInstance();
+            aShowroomManager = ShowroomManager.getShowroomManagerInstance();
+            aShowtimeManager = ShowtimeManager.getShowtimeManagerInstance();
 
-        setupListSelectionListener();
-        refreshView(aCurrentView);
+            // Load showtimes once to populate the showtime manager
+            ImportHelper.loadShowtime(aMovieManager.getMovies(), aShowroomManager.getShowrooms());
+
+            refreshView(aCurrentView);
+        }catch(Exception e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error" + e.getMessage());
+        }
     }
 
     /**
@@ -133,42 +137,94 @@ public class ManagerDashboardController {
         if (Objects.nonNull(aPageTitle)) {
             aPageTitle.setText(pViewName.toString());
         }
-
+        // Local variable to escape from being cleared
+        Object aSelectedItem = aListView.getSelectionModel().getSelectedItem();
+        setupListSelectionListener();
         aListView.getItems().clear();
-        aSelectedItem = null;
 
         switch (pViewName) {
             case MOVIES -> {
                 if (!aMovieManager.getMovies().isEmpty()) {
+                    aListView.getItems().clear();
                     aListView.getItems().addAll(aMovieManager.getMovies());
                 } else {
-                    // show friendly placeholder if empty
-                    aListView.getItems().add("No movies available. Click Add to create one.");
+                    AlertHelper.showErrorAlert("Movies Error","Add Movies","No Movies exist for this Movie Theater. \n Click Add to create some!");
                 }
             }
             case SHOWTIME -> {
-                if (!aShowtimeManager.getShowtimes().isEmpty()) {
-                    ImportHelper.loadShowtime(aMovieManager.getMovies(),aShowroomManager.getShowrooms());
 
-                    aListView.getItems().addAll(aShowtimeManager.getShowtimes());
-                } else {
-                    aListView.getItems().add("No showtimes available. Click Add to create one.");
+                // Must select a movie first
+                if (!(aSelectedItem instanceof Movie selectedMovie)) {
+
+                    aListView.getItems().addAll(aMovieManager.getMovies());
+                    return;
                 }
+
+                aListView.getItems().clear();
+
+                ObservableList<Showtime> allShowtimes = aShowtimeManager.getShowtimes();
+                List<Showtime> filtered = new ArrayList<>();
+
+                for (Showtime st : allShowtimes) {
+                    if (st.getMovie() == selectedMovie) {
+                        filtered.add(st);
+                    }
+                }
+
+                if (filtered.isEmpty()) {
+                    return;
+                }
+                aListView.getItems().addAll(filtered);
             }
-            case SHOWROOMS-> {
-                if (!aShowroomManager.getShowrooms().isEmpty()) {
-                    aListView.getItems().addAll(aShowroomManager.getShowrooms());
+            case SHOWROOMS -> {
+                aListView.getItems().clear();
+
+                // User must have selected a showtime
+                if (aSelectedItem instanceof Showtime selectedShowtime) {
+
+                    Showroom room = selectedShowtime.getShowroom();
+
+                    if (room != null) {
+                        aListView.getItems().add(room);
+                    } else {
+                        aListView.getItems().add("No showroom assigned.");
+                        AlertHelper.showErrorAlert("Showroom Error",
+                                "Missing Showroom",
+                                "This showtime has no showroom assigned.");
+                    }
+
                 } else {
-                    aListView.getItems().add("No showrooms available. Click Add to create one.");
+                    aListView.getItems().add("Select a showtime first.");
+                    AlertHelper.showErrorAlert("Selection Required",
+                            "Select a Showtime",
+                            "You need to select a showtime before viewing its showroom.");
                 }
             }
 //            case TICKETS -> {
-//                if (!aTicketManager.getShowrooms().isEmpty()) {
-//                    aListView.getItems().addAll(aTicketManager.getShowrooms());
+//                aListView.getItems().clear();
+//
+//                if (!aMovieManager.getMovies().isEmpty()) {
+//                    for (Movie movie : aMovieManager.getMovies()) {
+//                        long soldByMovie = aTicket.countByMovie(movie.getName(),);
+//                        aListView.getItems().add(
+//                                "Movie: " + movie.getName() + " | Tickets Sold: " + soldByMovie
+//                        );
+//
+//                        // Show tickets per showtime
+//                        for (Showtime st : aShowtimeManager.getShowtimes()) {
+//                            if (st.getMovie() == movie) {
+//                                long soldByShowtime = aTicket.countByShowtime(st.toString());
+//                                aListView.getItems().add(
+//                                        "  Showtime: " + st.getShowtime() + " | Tickets Sold: " + soldByShowtime
+//                                );
+//                            }
+//                        }
+//                    }
 //                } else {
-//                    aListView.getItems().add("No tickets available. Click Add to create one.");
+//                    aListView.getItems().add("No movies or tickets available.");
 //                }
 //            }
+
             default -> {
                 AlertHelper.showErrorAlert("View Error", "Unknown View", "Unrecognized view: " + pViewName);
             }

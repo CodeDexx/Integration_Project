@@ -1,6 +1,7 @@
 package com.example.integration_project.Model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -12,7 +13,7 @@ public class Ticket {
     private final String aTicketID;
     private final String aMovieName;
     private final String aShowtime;
-    private final LocalDate aPurchaseDateTime;
+    private final LocalDateTime aPurchaseDateTime;
 
     /**
      * Creates a ticket with the necessary information
@@ -22,7 +23,7 @@ public class Ticket {
      * @param pPurchaseDateTime The purchase date and time
      */
 
-    public Ticket(String pTicketID, String pMovieName, String pShowTime, LocalDate pPurchaseDateTime) {
+    public Ticket(String pTicketID, String pMovieName, String pShowTime, LocalDateTime pPurchaseDateTime) {
         aTicketID = pTicketID;
         aMovieName = pMovieName;
         aShowtime = pShowTime;
@@ -47,7 +48,7 @@ public class Ticket {
     public String getTime() {
         return aShowtime;
     }
-    public LocalDate getaPurchaseDateTime() {
+    public LocalDateTime getaPurchaseDateTime() {
         return aPurchaseDateTime;
     }
 
