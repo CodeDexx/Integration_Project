@@ -29,6 +29,15 @@ public class Ticket {
         aPurchaseDateTime = pPurchaseDateTime;
     }
 
+    public Ticket(String pTicketID, Showtimes s) {
+        this(
+                pTicketID,
+                s.getMovie().getName(),
+                s.getTime(),
+                LocalDate.now()
+        );
+    }
+
     public String getaTicketID() {
         return aTicketID;
     }

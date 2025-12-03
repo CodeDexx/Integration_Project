@@ -1,6 +1,7 @@
 package com.example.integration_project.Controller;
 
 import com.example.integration_project.Helpers.AlertHelper;
+import com.example.integration_project.Helpers.AlertHelper.EmailValidator;
 import com.example.integration_project.Model.User;
 import com.example.integration_project.MovieTheatreApplication;
 import javafx.fxml.FXML;
@@ -58,7 +59,12 @@ public class SignUpViewController {
         String email = aEmailTextField.getText();
 
         if (name.isEmpty() || password.isEmpty() || email.isEmpty()) {
-            AlertHelper.showErrorAlert("Missing Information", "Incomplete Form", "Please in all the fields.");
+            AlertHelper.showErrorAlert("Missing Information", "Incomplete Form", "Please fill in all the fields.");
+            return;
+        }
+
+        if (!EmailValidator.isValidFormat(email)) {
+            AlertHelper.showErrorAlert("Sign-Up Error", "Invalid Email Format", "Please enter a valid email address (e.g., name@domain.com).");
             return;
         }
 

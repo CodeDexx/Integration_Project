@@ -36,7 +36,7 @@ public class ImportHelper {
         return clients;
     }
 
-    public static List<Ticket> loadTickets() {
+    public static List<Ticket> loadTickets(List<Showtimes> showtimes) {
         List<Ticket> tickets = new ArrayList<>();
 
         tickets.add(new Ticket("T002", showtimes.get(1)));
@@ -46,6 +46,8 @@ public class ImportHelper {
 
         return tickets;
     }
+
+
 
     /**
      *

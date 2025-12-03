@@ -7,3 +7,7 @@
 /.idea/misc.xml
 /Integration_Project/src/main/java/com/example/integration_project/MovieTheaterApplication.java
 /.idea/misc.xml
+/Integration_Project/src/main/java/com/example/integration_project/Controller/ClientDashboardController.java.bak
+/Integration_Project/src/main/java/com/example/integration_project/Controller/LogInViewController.java.bak
+/Integration_Project/src/main/java/com/example/integration_project/Model/Showroom.java
+/Integration_Project/src/main/java/com/example/integration_project/Model/Showtime.java

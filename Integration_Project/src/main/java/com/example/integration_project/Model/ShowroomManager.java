@@ -11,7 +11,7 @@ import javafx.collections.ObservableList;
  * @version 1.0
  */
 public class ShowroomManager {
-    private final ObservableList<Showrooms> showrooms;
+    private static ObservableList<Showrooms> showrooms;
 
     private static ShowroomManager aInstance;
 
@@ -30,7 +30,7 @@ public class ShowroomManager {
      * 
      * @return an ObservableList containing all showrooms
      */
-    public ObservableList<Showrooms> getShowrooms() {
+    public static ObservableList<Showrooms> getShowrooms() {
         return showrooms;
     }
 

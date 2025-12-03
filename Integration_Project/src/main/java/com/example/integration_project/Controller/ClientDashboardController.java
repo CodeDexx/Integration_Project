@@ -14,8 +14,12 @@ import com.example.integration_project.Model.Showtimes;
 import com.example.integration_project.Model.ShowtimeManager;
 import com.example.integration_project.Model.Ticket;
 
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.stage.Stage;
 
 public class ClientDashboardController {
 
@@ -23,25 +27,34 @@ public class ClientDashboardController {
     private ListView<Movie> aMoviesListView;
 
     @FXML
+    private Button aLogoutButton;
+
+    @FXML
     private ListView<String> aDetailsListView;
 
-    private MovieManager aMovieManager;// = MovieManager.getMovies();
-    private ShowtimeManager aShowtimeManager; //= ShowtimeManager.getShowtimes();
-    private ShowroomManager aShowroomManager;// = ShowroomManager.getShowrooms();
+    private final ObservableList<Movie> aMovieManager = MovieManager.getMovies();
+    private final ObservableList<Showtimes> aShowtimeManager = ShowtimeManager.getShowtimes();
+    private final ObservableList<Showrooms> aShowroomManager = ShowroomManager.getShowrooms();
 
     private Movie aSelectedMovie;
-    private Showtime aSelectedShowtime;
-    private Showroom aSelectedShowroom;
+    private Showtimes aSelectedShowtime;
+    private Showrooms aSelectedShowroom;
 
     /** Showtime , Showroom */
-    private final HashMap<Showtime, Showroom> aShowTimeRoom = new HashMap<>();
+    private final HashMap<Showtimes, Showrooms> aShowTimeRoom = new HashMap<>();
 
 
     @FXML
     private void initialize() {
-        aMoviesListView.setItems(aMovieManager.getMovies());
+        aMoviesListView.setItems(aMovieManager);
         setupMovieSelection();
         setupDetailSelection();
+    }
+
+    @FXML
+    private void onLogoutButtonClick() {
+        Stage stage = (Stage) aLogoutButton.getScene().getWindow();
+        stage.close();
     }
 
 
@@ -61,16 +74,16 @@ public class ClientDashboardController {
 
         if (movie == null) return;
 
-        List<Movie> movies = aMovieManager.getMovies();
-        List<Showtime> showtimes = aShowtimeManager.getShowtimes();
-        List<Showroom> showrooms = aShowroomManager.getShowrooms();
+        List<Movie> movies = aMovieManager;
+        List<Showtimes> showtimes = aShowtimeManager;
+        List<Showrooms> showrooms = aShowroomManager;
 
         for (int i = 0; i < movies.size(); i++) {
             if (!movies.get(i).getName().equals(movie.getName()))
                 continue;
 
-            Showtime showtime = showtimes.get(i);
-            Showroom sr = showrooms.get(i);
+            Showtimes showtime = showtimes.get(i);
+            Showrooms sr = showrooms.get(i);
 
             aShowTimeRoom.put(showtime, sr);
 
@@ -93,8 +106,8 @@ public class ClientDashboardController {
                 return;
             }
 
-            Showtime st = aShowTimeRoom.keySet().stream().toList().get(index);
-            Showroom sr = aShowTimeRoom.get(st);
+            Showtimes st = aShowTimeRoom.keySet().stream().toList().get(index);
+            Showrooms sr = aShowTimeRoom.get(st);
 
             aSelectedShowtime = st;
             aSelectedShowroom = sr;
@@ -141,7 +154,7 @@ public class ClientDashboardController {
     }
 
     // Method to calculate remaining seats in Showroom at a given Showtime for a Movie
-    public int calculateRemainingSeats(Showroom showroom, Showtime showtime) {
+    public int calculateRemainingSeats(Showrooms showroom, Showtimes showtime) {
         // For simplicity, we assume the showroom's capacity is the total seats available
         // In a real application, you would check booked tickets for that showtime
         // and subtract from the showroom's capacity

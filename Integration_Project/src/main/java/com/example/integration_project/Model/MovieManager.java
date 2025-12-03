@@ -11,7 +11,7 @@ import javafx.collections.ObservableList;
  * @version 1.0
  */
 public class MovieManager {
-    private final ObservableList<Movie> movies;
+    private static ObservableList<Movie> movies;
 
     private static MovieManager aInstance;
 
@@ -30,7 +30,7 @@ public class MovieManager {
      * 
      * @return an ObservableList containing all movies
      */
-    public ObservableList<Movie> getMovies() {
+    public static ObservableList<Movie> getMovies() {
         return movies;
     }
 
