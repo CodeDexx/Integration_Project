@@ -41,7 +41,7 @@ public class TicketManager {
         long count = 0;
 
         for (Ticket t : tickets) {
-            if (t.getaMovieName().equals(movieName)) {
+            if (t.getName().equals(movieName)) {
                 count++;
             }
         }
@@ -59,7 +59,7 @@ public class TicketManager {
         long count = 0;
 
         for (Ticket t : tickets) {
-            if (t.getaShowtime().equals(showtime)) {
+            if (t.getTime().equals(showtime)) {
                 count++;
             }
         }
