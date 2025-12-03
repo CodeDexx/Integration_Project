@@ -1,5 +1,7 @@
 package com.example.integration_project.Model;
 
+import java.util.HashMap;
+
 /**
  * Represents a showroom in the theater system.
  * Encapsulates showroom information including room number and capacity.
@@ -10,6 +12,7 @@ package com.example.integration_project.Model;
 public class Showroom {
     private int roomNumber;
     private int roomCapacity;
+    private final HashMap<Showtime, Integer> aBookedSeats = new HashMap<>();
 
     /**
      * Constructs a Showroom with the specified room number and capacity.
@@ -22,6 +25,15 @@ public class Showroom {
     public Showroom(int roomNumber, int roomCapacity) {
         setRoomNumber(roomNumber);
         setRoomCapacity(roomCapacity);
+    }
+
+    public int getBookedSeats(Showtime st) {
+        return aBookedSeats.getOrDefault(st, 0);
+    }
+
+    public void bookSeat(Showtime st) {
+        int count = aBookedSeats.getOrDefault(st, 0);
+        aBookedSeats.put(st, count + 1);
     }
 
     /**

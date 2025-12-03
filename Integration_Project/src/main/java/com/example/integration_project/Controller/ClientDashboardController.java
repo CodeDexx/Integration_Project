@@ -1,7 +1,9 @@
 package com.example.integration_project.Controller;
 
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +30,9 @@ public class ClientDashboardController {
     @FXML
     private ListView<String> aDetailsListView;
 
+    @FXML
+    private Button aLogoutButton;
+
     private MovieManager aMovieManager;
     private ShowtimeManager aShowtimeManager;
     private ShowroomManager aShowroomManager;
@@ -36,12 +41,11 @@ public class ClientDashboardController {
     private Showtime aSelectedShowtime;
     private Showroom aSelectedShowroom;
 
-    /** Showtime , Showroom */
-    private final HashMap<Showtime, Showroom> aShowTimeRoom = new HashMap<>();
-    private Stage aStage;
-    @FXML
-    private Button aLogoutButton; //aLogoutButton
+    /** Ordered lists to track showtime → showroom correctly */
+    private final List<Showtime> aShowtimeList = new ArrayList<>();
+    private final List<Showroom> aShowroomList = new ArrayList<>();
 
+    private Stage aStage;
 
     @FXML
     private void initialize() {
@@ -51,7 +55,10 @@ public class ClientDashboardController {
         aMovieManager = MovieManager.getMovieManagerInstance();
         aShowroomManager = ShowroomManager.getShowroomManagerInstance();
         aShowtimeManager = ShowtimeManager.getShowtimeManagerInstance();
+
         aMoviesListView.setItems(aMovieManager.getMovies());
+        ImportHelper.loadShowtime(aMovieManager.getMovies(), aShowroomManager.getShowrooms());
+
         setupMovieSelection();
         setupDetailSelection();
     }
@@ -63,96 +70,91 @@ public class ClientDashboardController {
         });
     }
 
-
     private void loadPairsForMovie(Movie movie) {
         aDetailsListView.getItems().clear();
-        aShowTimeRoom.clear();
+        aShowtimeList.clear();
+        aShowroomList.clear();
         aSelectedShowtime = null;
         aSelectedShowroom = null;
 
         if (movie == null) return;
 
-        List<Movie> movies = aMovieManager.getMovies();
-        List<Showtime> showtimes = aShowtimeManager.getShowtimes();
-        List<Showroom> showrooms = aShowroomManager.getShowrooms();
+        for (Showtime st : aShowtimeManager.getShowtimes()) {
+            if (st.getMovie() == movie) {  // compare object references
+                Showroom room = st.getShowroom();
+                aShowtimeList.add(st);
+                aShowroomList.add(room);
 
-        for (int i = 0; i < movies.size(); i++) {
-            if (!movies.get(i).getName().equals(movie.getName()))
-                continue;
+                int remaining = calculateRemainingSeats(room, st);
 
-            Showtime showtime = showtimes.get(i); // to be checked
-            Showroom sr = showrooms.get(i);
+                aDetailsListView.getItems().add(
+                        st.getShowtime().toLocalDate() + " " +
+                                st.getShowtime().toLocalTime() +
+                                " | Room " + room.getRoomNumber() +
+                                " | Seats Left: " + remaining
+                );
+            }
+        }
 
-            aShowTimeRoom.put(showtime, sr);
-
-            aDetailsListView.getItems().add(
-                    showtime.toString() +
-                            "  |  Room " + sr.getRoomNumber() +
-                            "  |  Seats Left: " + sr.getCapacity() /** To be calculated*/
-            );
+        if (aDetailsListView.getItems().isEmpty()) {
+            aDetailsListView.getItems().add("No showtimes available for this movie.");
         }
     }
 
-
     private void setupDetailSelection() {
-        aDetailsListView = new ListView<>();
         aDetailsListView.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
             int index = newVal.intValue();
-
-            if (index < 0 || index >= aShowTimeRoom.size()) {
+            if (index < 0 || index >= aShowtimeList.size()) {
                 aSelectedShowtime = null;
                 aSelectedShowroom = null;
                 return;
             }
 
-            Showtime st = aShowTimeRoom.keySet().stream().toList().get(index);
-            Showroom sr = aShowTimeRoom.get(st);
-
-            aSelectedShowtime = st;
-            aSelectedShowroom = sr;
+            aSelectedShowtime = aShowtimeList.get(index);
+            aSelectedShowroom = aShowroomList.get(index);
         });
     }
 
     @FXML
     private void onBookButtonClick() {
+        try {
+            if (aSelectedMovie == null) {
+                AlertHelper.showErrorAlert("Booking Error", "Movie Missing", "Please select a movie first.");
+                return;
+            }
 
-        if (aSelectedMovie == null) {
-            AlertHelper.showErrorAlert("Booking Error", "Movie Missing", "Please select a movie first.");
-            return;
+            if (aSelectedShowtime == null || aSelectedShowroom == null) {
+                AlertHelper.showErrorAlert("Booking Error", "Selection Missing", "Select a showtime and showroom.");
+                return;
+            }
+
+            // Book seat
+            aSelectedShowroom.bookSeat(aSelectedShowtime);
+
+            // Generate Ticket
+            Ticket ticket = new Ticket(
+                    UUID.randomUUID().toString(),
+                    aSelectedMovie.getName(),
+                    aSelectedShowtime.toString(),
+                    LocalDateTime.now()
+            );
+
+            // Show ticket popup
+            AlertHelper.showInfoAlert("Booking Confirmed", "Your ticket is ready!", ticket.toString());
+
+            // Refresh UI
+            loadPairsForMovie(aSelectedMovie);
+
+        } catch (Exception e) {
+            AlertHelper.showErrorAlert("Booking Error", e.getMessage(), e.toString());
         }
-
-        if (aSelectedShowtime == null || aSelectedShowroom == null) {
-            AlertHelper.showErrorAlert("Booking Error", "Selection Missing", "Select a showtime and showroom.");
-            return;
-        }
-
-        // Generate Ticket
-        Ticket ticket = new Ticket(
-                UUID.randomUUID().toString(),
-                aSelectedMovie.getName(),
-                aSelectedShowtime.toString(),  // Showtime as String  // to be formatted
-                LocalDate.now()
-        );
-
-        // Show ticket popup
-        AlertHelper.showInfoAlert("Booking Confirmed", "Your ticket is ready!", ticket.toString());
-
-        // Refresh UI
-        loadPairsForMovie(aSelectedMovie);
     }
 
-//    // Method to calculate remaining seats in Showroom at a given Showtime for a Movie
-//    public int calculateRemainingSeats(Showroom showroom, Showtime showtime) {
-//        // For simplicity, we assume the showroom's capacity is the total seats available
-//        // In a real application, you would check booked tickets for that showtime
-//        // and subtract from the showroom's capacity
-//        int availableSeats = /** showroom.getCapacity() - showroom.getBookedSeats();  // to be done*/ showroom.getCapacity();
-//        return availableSeats;
-//    }
+    public int calculateRemainingSeats(Showroom showroom, Showtime showtime) {
+        int booked = showroom.getBookedSeats(showtime);
+        return showroom.getCapacity() - booked;
+    }
 
-    /**
-     * Closes the dashboard window (logout).
-     */
     @FXML
     private void onLogoutButtonClick() {
         aStage = (Stage) aLogoutButton.getScene().getWindow();

@@ -7,13 +7,7 @@ import java.util.Objects;
 
 import com.example.integration_project.Helpers.AlertHelper;
 import com.example.integration_project.Helpers.ImportHelper;
-import com.example.integration_project.Model.Movie;
-import com.example.integration_project.Model.MovieManager;
-import com.example.integration_project.Model.Showroom;
-import com.example.integration_project.Model.ShowroomManager;
-import com.example.integration_project.Model.Showtime;
-import com.example.integration_project.Model.ShowtimeManager;
-import com.example.integration_project.Model.Manager;
+import com.example.integration_project.Model.*;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -206,24 +200,31 @@ public class ManagerDashboardController {
                             "You need to select a showtime before viewing its showroom.");
                 }
             }
-
-//            case SHOWROOMS-> {
-//                if (aShowroomManager.getShowrooms() != null) {
-//                    aListView.getItems().clear();
-//                    aListView.getItems().addAll(aShowroomManager.getShowrooms());
-//                } else {
-//                    aListView.getItems().add("No showrooms available. Click Add to create one.");
-//                    AlertHelper.showErrorAlert("Showroom Error","Add showroom","No showroom exist for this movie. \n Add showtime!");
-//                    aListView.getItems().addAll(aShowroomManager.getShowrooms());
-//                }
-//            }
 //            case TICKETS -> {
-//                if (!aTicketManager.getShowrooms().isEmpty()) {
-//                    aListView.getItems().addAll(aTicketManager.getShowrooms());
+//                aListView.getItems().clear();
+//
+//                if (!aMovieManager.getMovies().isEmpty()) {
+//                    for (Movie movie : aMovieManager.getMovies()) {
+//                        long soldByMovie = aTicket.countByMovie(movie.getName(),);
+//                        aListView.getItems().add(
+//                                "Movie: " + movie.getName() + " | Tickets Sold: " + soldByMovie
+//                        );
+//
+//                        // Show tickets per showtime
+//                        for (Showtime st : aShowtimeManager.getShowtimes()) {
+//                            if (st.getMovie() == movie) {
+//                                long soldByShowtime = aTicket.countByShowtime(st.toString());
+//                                aListView.getItems().add(
+//                                        "  Showtime: " + st.getShowtime() + " | Tickets Sold: " + soldByShowtime
+//                                );
+//                            }
+//                        }
+//                    }
 //                } else {
-//                    aListView.getItems().add("No tickets available. Click Add to create one.");
+//                    aListView.getItems().add("No movies or tickets available.");
 //                }
 //            }
+
             default -> {
                 AlertHelper.showErrorAlert("View Error", "Unknown View", "Unrecognized view: " + pViewName);
             }
