@@ -1,21 +1,13 @@
 package com.example.integration_project.Controller;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import com.example.integration_project.Helpers.AlertHelper;
 import com.example.integration_project.Helpers.ImportHelper;
-import com.example.integration_project.Model.Movie;
-import com.example.integration_project.Model.MovieManager;
-import com.example.integration_project.Model.Showroom;
-import com.example.integration_project.Model.ShowroomManager;
-import com.example.integration_project.Model.Showtime;
-import com.example.integration_project.Model.ShowtimeManager;
-import com.example.integration_project.Model.Ticket;
+import com.example.integration_project.Model.*;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -139,7 +131,10 @@ public class ClientDashboardController {
                     LocalDateTime.now()
             );
 
-            // Show ticket popup
+            // Add the ticket to TicketManager
+            TicketManager.getInstance().addTicket(ticket);
+
+            // Show ticket notification
             AlertHelper.showInfoAlert("Booking Confirmed", "Your ticket is ready!", ticket.toString());
 
             // Refresh UI

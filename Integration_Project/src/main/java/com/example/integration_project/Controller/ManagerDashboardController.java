@@ -9,6 +9,7 @@ import com.example.integration_project.Helpers.AlertHelper;
 import com.example.integration_project.Helpers.ImportHelper;
 import com.example.integration_project.Model.*;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -47,8 +48,6 @@ import javafx.stage.Stage;
 
 public class ManagerDashboardController {
 
-    /// TODO Ticket number tickets sold per showtime and per movie
-    /// Consult the number of tickets sold by showtime and by movie
     public enum DashboardView {
         MOVIES,
         SHOWTIME,
@@ -83,6 +82,10 @@ public class ManagerDashboardController {
     private MovieManager aMovieManager;
     private ShowtimeManager aShowtimeManager;
     private ShowroomManager aShowroomManager;
+    private TicketManager aTicketManager;
+    private List<Ticket> aTickets;
+
+    List<Ticket> aTicketList = TicketManager.getInstance().getTickets();
 
     /**
      * JavaFX initialize method. Sets up selection listener and refreshes initial view.
@@ -93,10 +96,11 @@ public class ManagerDashboardController {
         try{
             ImportHelper.loadMovies();
             ImportHelper.loadShowrooms();
+            //ImportHelper.loadTickets();
             aMovieManager = MovieManager.getMovieManagerInstance();
             aShowroomManager = ShowroomManager.getShowroomManagerInstance();
             aShowtimeManager = ShowtimeManager.getShowtimeManagerInstance();
-
+            aTicketManager = TicketManager.getInstance();
             // Load showtimes once to populate the showtime manager
             ImportHelper.loadShowtime(aMovieManager.getMovies(), aShowroomManager.getShowrooms());
 
@@ -200,30 +204,30 @@ public class ManagerDashboardController {
                             "You need to select a showtime before viewing its showroom.");
                 }
             }
-//            case TICKETS -> {
-//                aListView.getItems().clear();
-//
-//                if (!aMovieManager.getMovies().isEmpty()) {
-//                    for (Movie movie : aMovieManager.getMovies()) {
-//                        long soldByMovie = aTicket.countByMovie(movie.getName(),);
-//                        aListView.getItems().add(
-//                                "Movie: " + movie.getName() + " | Tickets Sold: " + soldByMovie
-//                        );
-//
-//                        // Show tickets per showtime
-//                        for (Showtime st : aShowtimeManager.getShowtimes()) {
-//                            if (st.getMovie() == movie) {
-//                                long soldByShowtime = aTicket.countByShowtime(st.toString());
-//                                aListView.getItems().add(
-//                                        "  Showtime: " + st.getShowtime() + " | Tickets Sold: " + soldByShowtime
-//                                );
-//                            }
-//                        }
-//                    }
-//                } else {
-//                    aListView.getItems().add("No movies or tickets available.");
-//                }
-//            }
+            case TICKETS -> {
+                aListView.getItems().clear();
+
+                if (!aMovieManager.getMovies().isEmpty()) {
+                    for (Movie movie : aMovieManager.getMovies()) {
+                        long soldByMovie = TicketManager.countByMovie(aTicketList,movie.getName());
+                        aListView.getItems().add(
+                                "Movie: " + movie.getName() + " | Tickets Sold: " + soldByMovie
+                        );
+
+                        // Show tickets per showtime
+                        for (Showtime st : aShowtimeManager.getShowtimes()) {
+                            if (st.getMovie() == movie) {
+                                long soldByShowtime = TicketManager.countByShowtime(aTicketList,st.toString());
+                                aListView.getItems().add(
+                                        "  Showtime: " + st.getShowtime() + " | Tickets Sold: " + soldByShowtime
+                                );
+                            }
+                        }
+                    }
+                } else {
+                    aListView.getItems().add("No movies or tickets available.");
+                }
+            }
 
             default -> {
                 AlertHelper.showErrorAlert("View Error", "Unknown View", "Unrecognized view: " + pViewName);
