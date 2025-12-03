@@ -11,7 +11,20 @@ import javafx.collections.ObservableList;
  * @version 1.0
  */
 public class ShowtimeManager {
-    private final ObservableList<Showtime> showtimes = FXCollections.observableArrayList();
+    private final ObservableList<Showtime> showtime;
+
+    private static ShowtimeManager aInstance;
+
+    private ShowtimeManager() {
+        showtime = FXCollections.observableArrayList();
+    }
+
+    public static ShowtimeManager getShowtimeManagerInstance() {
+        if (aInstance == null) {
+            aInstance = new ShowtimeManager();
+        }
+        return aInstance;
+    }
 
     /**
      * Gets the list of all showtimes.
@@ -19,7 +32,7 @@ public class ShowtimeManager {
      * @return an ObservableList containing all showtimes
      */
     public ObservableList<Showtime> getShowtimes() {
-        return showtimes;
+        return showtime;
     }
 
     /**
@@ -32,7 +45,7 @@ public class ShowtimeManager {
         if (showtime == null) {
             throw new IllegalArgumentException("Showtime cannot be null");
         }
-        showtimes.add(showtime);
+        this.showtime.add(showtime);
     }
 
     /**
@@ -45,6 +58,6 @@ public class ShowtimeManager {
         if (showtime == null) {
             throw new IllegalArgumentException("Showtime cannot be null");
         }
-        showtimes.remove(showtime);
+        this.showtime.remove(showtime);
     }
 }
