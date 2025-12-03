@@ -88,18 +88,18 @@ public class ImportHelper {
         };
 
         // Spider-Man showtimes
-        showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("11/20/2025", "10:30 AM"), r101));
-        showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("11/21/2025", "11:30 AM"), r101));
-        showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("11/22/2025", "12:30 PM"), r101));
-        showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("11/23/2025", "1:30 PM"), r101));
+        showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("12/20/2025", "10:30 AM"), r101));
+        showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("12/21/2025", "12:30 AM"), r101));
+        showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("12/22/2025", "12:30 PM"), r101));
+        showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("12/23/2025", "1:30 PM"), r101));
 
         // Matrix showtimes
-        showtime.addShowtime(new Showtime(matrix, buildDateTime.apply("11/24/2025", "10:30 AM"), r102));
-        showtime.addShowtime(new Showtime(matrix, buildDateTime.apply("11/24/2025", "11:30 AM"), r103));
-        showtime.addShowtime(new Showtime(matrix, buildDateTime.apply("11/24/2025", "12:30 PM"), r104));
+        showtime.addShowtime(new Showtime(matrix, buildDateTime.apply("12/24/2025", "10:30 AM"), r102));
+        showtime.addShowtime(new Showtime(matrix, buildDateTime.apply("12/24/2025", "12:30 AM"), r103));
+        showtime.addShowtime(new Showtime(matrix, buildDateTime.apply("12/24/2025", "12:30 PM"), r104));
 
         // Barbie showtime
-        showtime.addShowtime(new Showtime(barbie, buildDateTime.apply("11/25/2025", "1:30 PM"), r105));
+        showtime.addShowtime(new Showtime(barbie, buildDateTime.apply("12/25/2025", "1:30 PM"), r105));
 
         return showtime.getShowtimes();
     }
@@ -108,16 +108,21 @@ public class ImportHelper {
     // FINDERS
     // -------------------------------------------------------------
     private static Movie findMovie(List<Movie> list, String name) {
-        return list.stream()
-                .filter(movie -> movie.getName().equals(name))
-                .findFirst()
-                .orElse(null);
+        for (Movie movie : list) {
+            if (movie.getName().equals(name)) {
+                return movie;
+            }
+        }
+        return null;
+
     }
 
     private static Showroom findRoom(List<Showroom> list, int number) {
-        return list.stream()
-                .filter(room -> room.getRoomNumber() == number)
-                .findFirst()
-                .orElse(null);
+        for (Showroom room : list) {
+            if (room.getRoomNumber() == number) {
+                return room;
+            }
+        }
+        return null;
     }
 }
