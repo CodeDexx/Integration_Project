@@ -46,13 +46,13 @@ public class ClientDashboardController {
     @FXML
     private void initialize() {
         ImportHelper.loadMovies();
-        ImportHelper.loadShowrooms();
+        ImportHelper.loadShowroom();
 
         aMovieManager = MovieManager.getMovieManagerInstance();
         aShowroomManager = ShowroomManager.getShowroomManagerInstance();
         aShowtimeManager = ShowtimeManager.getShowtimeManagerInstance();
         aMoviesListView.setItems(aMovieManager.getMovies());
-        ImportHelper.loadShowtime(aMovieManager.getMovies(), aShowroomManager.getShowrooms());
+        ImportHelper.loadShowtime(aMovieManager.getMovies(), aShowroomManager.getShowroom());
 
         setupMovieSelection();
         setupDetailSelection();
@@ -74,7 +74,7 @@ public class ClientDashboardController {
 
         if (movie == null) return;
 
-        for (Showtime st : aShowtimeManager.getShowtimes()) {
+        for (Showtime st : aShowtimeManager.getShowtime()) {
             if (st.getMovie() == movie) {  // compare object references
                 Showroom room = st.getShowroom();
                 aShowtimeList.add(st);
@@ -92,7 +92,7 @@ public class ClientDashboardController {
         }
 
         if (aDetailsListView.getItems().isEmpty()) {
-            aDetailsListView.getItems().add("No showtimes available for this movie.");
+            aDetailsListView.getItems().add("No Showtime available for this movie.");
         }
     }
 

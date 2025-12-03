@@ -4,19 +4,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- * Manages the collection of showrooms in the theater system.
- * Handles adding, removing, and retrieving showrooms.
+ * Manages the collection of Showroom in the theater system.
+ * Handles adding, removing, and retrieving Showroom.
  * 
  * @author Ian
  * @version 1.0
  */
 public class ShowroomManager {
-    private static ObservableList<Showrooms> showrooms;
+    private static ObservableList<Showroom> Showroom;
 
     private static ShowroomManager aInstance;
 
     public ShowroomManager() {
-        showrooms = FXCollections.observableArrayList();
+        Showroom = FXCollections.observableArrayList();
     }
 
     public static ShowroomManager getShowroomManagerInstance() {
@@ -26,12 +26,12 @@ public class ShowroomManager {
         return aInstance;
     }
     /**
-     * Gets the list of all showrooms.
+     * Gets the list of all Showroom.
      * 
-     * @return an ObservableList containing all showrooms
+     * @return an ObservableList containing all Showroom
      */
-    public static ObservableList<Showrooms> getShowrooms() {
-        return showrooms;
+    public static ObservableList<Showroom> getShowroom() {
+        return Showroom;
     }
 
     /**
@@ -40,11 +40,11 @@ public class ShowroomManager {
      * @param showroom the showroom to add
      * @throws IllegalArgumentException if showroom is null
      */
-    public void addShowroom(Showrooms showroom) {
+    public void addShowroom(Showroom showroom) {
         if (showroom == null) {
             throw new IllegalArgumentException("Showroom cannot be null");
         }
-        showrooms.add(showroom);
+        Showroom.add(showroom);
     }
 
     /**
@@ -53,10 +53,10 @@ public class ShowroomManager {
      * @param showroom the showroom to remove
      * @throws IllegalArgumentException if showroom is null
      */
-    public void removeShowroom(Showrooms showroom) {
+    public void removeShowroom(Showroom showroom) {
         if (showroom == null) {
             throw new IllegalArgumentException("Showroom cannot be null");
         }
-        showrooms.remove(showroom);
+        Showroom.remove(showroom);
     }
 }

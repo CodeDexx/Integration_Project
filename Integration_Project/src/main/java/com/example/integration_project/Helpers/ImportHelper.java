@@ -12,7 +12,7 @@ import java.util.function.BiFunction;
 
 /**
  * The {@code ImportHelper} class loads demo/sample data for the
- * movie theater system, including clients, movies, showrooms, and showtime.
+ * movie theater system, including clients, movies, Showroom, and showtime.
  *
  * <p>This helper keeps your application clean by centralizing all
  * sample initialization logic in one place.</p>
@@ -36,13 +36,13 @@ public class ImportHelper {
         return clients;
     }
 
-    public static List<Ticket> loadTickets(List<Showtimes> showtimes) {
+    public static List<Ticket> loadTickets(List<Showtime> Showtime) {
         List<Ticket> tickets = new ArrayList<>();
 
-        tickets.add(new Ticket("T002", showtimes.get(1)));
-        tickets.add(new Ticket("T003", showtimes.get(1)));
-        tickets.add(new Ticket("T004", showtimes.get(3)));
-        tickets.add(new Ticket("T005", showtimes.get(5)));
+        tickets.add(new Ticket("T002", Showtime.get(1)));
+        tickets.add(new Ticket("T003", Showtime.get(1)));
+        tickets.add(new Ticket("T004", Showtime.get(3)));
+        tickets.add(new Ticket("T005", Showtime.get(5)));
 
         return tickets;
     }
@@ -63,9 +63,9 @@ public class ImportHelper {
     }
 
     // -------------------------------------------------------------
-    // SHOWROOMS
+    // Showroom
     // -------------------------------------------------------------
-    public static void loadShowrooms() {
+    public static void loadShowroom() {
         ShowroomManager  rooms = ShowroomManager.getShowroomManagerInstance();
 
         rooms.addShowroom(new Showroom(101, 15));
@@ -78,7 +78,7 @@ public class ImportHelper {
     // -------------------------------------------------------------
     // SHOWTIME — rewritten for LocalDateTime compatibility
     // -------------------------------------------------------------
-    public static List<Showtime> loadShowtime(List<Movie> movies, List<Showroom> rooms) {
+    public static void loadShowtime(List<Movie> movies, List<Showroom> rooms) {
         ShowtimeManager showtime = ShowtimeManager.getShowtimeManagerInstance();
 
         // Lookup helpers
@@ -103,13 +103,13 @@ public class ImportHelper {
             return LocalDateTime.of(d, t);
         };
 
-        // Spider-Man showtimes
+        // Spider-Man Showtime
         showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("12/20/2025", "10:30 AM"), r101));
         showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("12/21/2025", "12:30 AM"), r101));
         showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("12/22/2025", "12:30 PM"), r101));
         showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("12/23/2025", "1:30 PM"), r101));
 
-        // Matrix showtimes
+        // Matrix Showtime
         showtime.addShowtime(new Showtime(matrix, buildDateTime.apply("12/24/2025", "10:30 AM"), r102));
         showtime.addShowtime(new Showtime(matrix, buildDateTime.apply("12/24/2025", "12:30 AM"), r103));
         showtime.addShowtime(new Showtime(matrix, buildDateTime.apply("12/24/2025", "12:30 PM"), r104));
@@ -117,7 +117,7 @@ public class ImportHelper {
         // Barbie showtime
         showtime.addShowtime(new Showtime(barbie, buildDateTime.apply("12/25/2025", "1:30 PM"), r105));
 
-        return showtime.getShowtimes();
+        //return showtime.getShowtime();
     }
 
     // -------------------------------------------------------------

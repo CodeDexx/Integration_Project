@@ -4,14 +4,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- * Manages the collection of showtimes in the theater system.
- * Handles adding, removing, and retrieving showtimes.
+ * Manages the collection of Showtime in the theater system.
+ * Handles adding, removing, and retrieving Showtime.
  * 
  * @author Ian
  * @version 1.0
  */
 public class ShowtimeManager {
-    private static ObservableList<Showtimes> showtime;
+    private static ObservableList<Showtime> showtime;
 
     private static ShowtimeManager aInstance;
 
@@ -27,11 +27,11 @@ public class ShowtimeManager {
     }
 
     /**
-     * Gets the list of all showtimes.
+     * Gets the list of all Showtime.
      * 
-     * @return an ObservableList containing all showtimes
+     * @return an ObservableList containing all Showtime
      */
-    public static ObservableList<Showtimes> getShowtimes() {
+    public static ObservableList<Showtime> getShowtime() {
         return showtime;
     }
 
@@ -41,7 +41,7 @@ public class ShowtimeManager {
      * @param showtime the showtime to add
      * @throws IllegalArgumentException if showtime is null
      */
-    public void addShowtime(Showtimes showtime) {
+    public void addShowtime(Showtime showtime) {
         if (showtime == null) {
             throw new IllegalArgumentException("Showtime cannot be null");
         }
@@ -54,7 +54,7 @@ public class ShowtimeManager {
      * @param showtime the showtime to remove
      * @throws IllegalArgumentException if showtime is null
      */
-    public void removeShowtime(Showtimes showtime) {
+    public void removeShowtime(Showtime showtime) {
         if (showtime == null) {
             throw new IllegalArgumentException("Showtime cannot be null");
         }

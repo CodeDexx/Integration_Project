@@ -14,16 +14,16 @@ import java.time.LocalTime;
 import com.example.integration_project.Helpers.AlertHelper;
 import com.example.integration_project.Model.Movie;
 import com.example.integration_project.Model.MovieManager;
-import com.example.integration_project.Model.Showrooms;
+import com.example.integration_project.Model.Showroom;
 import com.example.integration_project.Model.ShowroomManager;
-import com.example.integration_project.Model.Showtimes;
+import com.example.integration_project.Model.Showtime;
 import com.example.integration_project.Model.ShowtimeManager;
 
 /**
  * Controller for the add-edit-view.fxml file in the Movie Theater Management System.
  * 
  * This controller handles adding and editing operations for three entity types:
- * Movies, Showtimes, and Showrooms. It implements the MVC pattern by managing the
+ * Movies, Showtime, and Showroom. It implements the MVC pattern by managing the
  * interaction between the FXML view and the model classes through manager instances.
  * 
  * <p>The controller uses a single reusable FXML view with conditional UI logic based
@@ -46,8 +46,8 @@ import com.example.integration_project.Model.ShowtimeManager;
  * @version 1.0
  * @see FormMode
  * @see Movie
- * @see Showtimes
- * @see Showrooms
+ * @see Showtime
+ * @see Showroom
  * @see MovieManager
  * @see ShowtimeManager
  * @see ShowroomManager
@@ -122,7 +122,7 @@ public class AddEditController {
     
     /** Choice box for selecting a Showroom when adding or editing a Showtime */
     @FXML
-    private ChoiceBox<Showrooms> aRoomChoiceBox;
+    private ChoiceBox<Showroom> aRoomChoiceBox;
     
     /** Button to save changes or create a new object */
     @FXML
@@ -182,9 +182,9 @@ public class AddEditController {
      * @param pMovieManager the MovieManager instance for retrieving/persisting Movie data.
      *                       Must not be null when mode involves movies.
      * @param pShowtimeManager the ShowtimeManager instance for retrieving/persisting Showtime data.
-     *                          Must not be null when mode involves showtimes.
+     *                          Must not be null when mode involves Showtime.
      * @param pShowroomManager the ShowroomManager instance for retrieving/persisting Showroom data.
-     *                          Must not be null when mode involves showrooms.
+     *                          Must not be null when mode involves Showroom.
      * @see FormMode
      * @see #setupUI()
      * @see #populateChoiceBoxes()
@@ -331,11 +331,11 @@ public class AddEditController {
      *   <li>Showtime modes populate:
      *     <ul>
      *       <li>Movie choice box with all available movies</li>
-     *       <li>Room choice box with all available showrooms</li>
-     *       <li>Showtime choice box with all available showtimes</li>
+     *       <li>Room choice box with all available Showroom</li>
+     *       <li>Showtime choice box with all available Showtime</li>
      *     </ul>
      *   </li>
-     *   <li>Room modes populate the room choice box with all available showrooms</li>
+     *   <li>Room modes populate the room choice box with all available Showroom</li>
      * </ul>
      * </p>
      * 
@@ -353,13 +353,13 @@ public class AddEditController {
                 if (aMovieManager != null && !aMovieManager.getMovies().isEmpty()) {
                     aMovieChoiceBox.getItems().addAll(aMovieManager.getMovies());
             }
-                if (aShowroomManager != null && !aShowroomManager.getShowrooms().isEmpty()) {
-                    aRoomChoiceBox.getItems().addAll(aShowroomManager.getShowrooms());
+                if (aShowroomManager != null && !aShowroomManager.getShowroom().isEmpty()) {
+                    aRoomChoiceBox.getItems().addAll(aShowroomManager.getShowroom());
                 }
                 break;
             case ADD_ROOM, EDIT_ROOM:
-                if (aShowroomManager != null && !aShowroomManager.getShowrooms().isEmpty()) {
-                    aRoomChoiceBox.getItems().addAll(aShowroomManager.getShowrooms());
+                if (aShowroomManager != null && !aShowroomManager.getShowroom().isEmpty()) {
+                    aRoomChoiceBox.getItems().addAll(aShowroomManager.getShowroom());
                 }
                 break;
         }
@@ -397,14 +397,14 @@ public class AddEditController {
                 aNameTextField.setText(movie.getName());
                 break;
             case EDIT_SHOWTIME:
-                Showtimes showtime = (Showtimes) aCurrentObject;
+                Showtime showtime = (Showtime) aCurrentObject;
                 aMovieChoiceBox.setValue(showtime.getMovie());
                 aDatePicker.setValue(showtime.getDate());
                 aTimeTextField.setText(showtime.getTime());
                 aRoomChoiceBox.setValue(showtime.getShowroom());
                 break;
             case EDIT_ROOM:
-                Showrooms room = (Showrooms) aCurrentObject;
+                Showroom room = (Showroom) aCurrentObject;
                 aNameTextField.setText(String.valueOf(room.getRoomNumber()));
                 aCapacityTextField.setText(String.valueOf(room.getCapacity()));
                 break;
@@ -527,7 +527,7 @@ public class AddEditController {
                         
                         // Create Showtime
                         Movie movie = aMovieChoiceBox.getValue();
-                        Showrooms room = aRoomChoiceBox.getValue();
+                        Showroom room = aRoomChoiceBox.getValue();
                         LocalDate date = aDatePicker.getValue();
                         String timeStr = aTimeTextField.getText().trim();
                         
@@ -535,7 +535,7 @@ public class AddEditController {
                         LocalTime time = LocalTime.parse(timeStr);
                         LocalDateTime dateTime = LocalDateTime.of(date, time);
                         
-                        Showtimes newShowtime = new Showtimes(movie, dateTime, room);
+                        Showtime newShowtime = new Showtime(movie, dateTime, room);
                         aShowtimeManager.addShowtime(newShowtime);
                         AlertHelper.showInfoAlert("Success", "Showtime Added", 
                             "Showtime has been added successfully");
@@ -571,7 +571,7 @@ public class AddEditController {
                             return;
                         }
                         
-                        Showtimes showtime = (Showtimes) aCurrentObject;
+                        Showtime showtime = (Showtime) aCurrentObject;
                         showtime.setMovie(aMovieChoiceBox.getValue());
                         showtime.setShowroom(aRoomChoiceBox.getValue());
                         showtime.setDate(aDatePicker.getValue());
@@ -600,7 +600,7 @@ public class AddEditController {
                     int roomNumber = Integer.parseInt(roomNumberStr);
                     int capacity = Integer.parseInt(capacityStr);
                     
-                    Showrooms newRoom = new Showrooms(roomNumber, capacity);
+                    Showroom newRoom = new Showroom(roomNumber, capacity);
                     aShowroomManager.addShowroom(newRoom);
                     AlertHelper.showInfoAlert("Success", "Room Added", 
                         "Room has been added successfully");
@@ -626,7 +626,7 @@ public class AddEditController {
                     int roomNumber = Integer.parseInt(roomNumberStr);
                     int capacity = Integer.parseInt(capacityStr);
                     
-                    Showrooms room = (Showrooms) aCurrentObject;
+                    Showroom room = (Showroom) aCurrentObject;
                     room.setRoomNumber(roomNumber);
                     room.setRoomCapacity(capacity);
                     AlertHelper.showInfoAlert("Success", "Room Updated", 

@@ -3,6 +3,7 @@ package com.example.integration_project.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -32,12 +33,12 @@ public class Ticket {
         aPurchaseDateTime = pPurchaseDateTime;
     }
 
-    public Ticket(String pTicketID, Showtimes s) {
+    public Ticket(String pTicketID, Showtime s) {
         this(
                 pTicketID,
                 s.getMovie().getName(),
                 s.getTime(),
-                LocalDate.now()
+                LocalDateTime.now()
         );
     }
 
