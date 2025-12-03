@@ -23,7 +23,7 @@ import com.example.integration_project.Model.ShowtimeManager;
  * Controller for the add-edit-view.fxml file in the Movie Theater Management System.
  * 
  * This controller handles adding and editing operations for three entity types:
- * Movies, Showtimes, and Showrooms. It implements the MVC pattern by managing the
+ * Movies, Showtime, and Showroom. It implements the MVC pattern by managing the
  * interaction between the FXML view and the model classes through manager instances.
  * 
  * <p>The controller uses a single reusable FXML view with conditional UI logic based
@@ -182,9 +182,9 @@ public class AddEditController {
      * @param pMovieManager the MovieManager instance for retrieving/persisting Movie data.
      *                       Must not be null when mode involves movies.
      * @param pShowtimeManager the ShowtimeManager instance for retrieving/persisting Showtime data.
-     *                          Must not be null when mode involves showtimes.
+     *                          Must not be null when mode involves Showtime.
      * @param pShowroomManager the ShowroomManager instance for retrieving/persisting Showroom data.
-     *                          Must not be null when mode involves showrooms.
+     *                          Must not be null when mode involves Showroom.
      * @see FormMode
      * @see #setupUI()
      * @see #populateChoiceBoxes()
@@ -331,11 +331,11 @@ public class AddEditController {
      *   <li>Showtime modes populate:
      *     <ul>
      *       <li>Movie choice box with all available movies</li>
-     *       <li>Room choice box with all available showrooms</li>
-     *       <li>Showtime choice box with all available showtimes</li>
+     *       <li>Room choice box with all available Showroom</li>
+     *       <li>Showtime choice box with all available Showtime</li>
      *     </ul>
      *   </li>
-     *   <li>Room modes populate the room choice box with all available showrooms</li>
+     *   <li>Room modes populate the room choice box with all available Showroom</li>
      * </ul>
      * </p>
      * 
@@ -353,13 +353,13 @@ public class AddEditController {
                 if (aMovieManager != null && !aMovieManager.getMovies().isEmpty()) {
                     aMovieChoiceBox.getItems().addAll(aMovieManager.getMovies());
             }
-                if (aShowroomManager != null && !aShowroomManager.getShowrooms().isEmpty()) {
-                    aRoomChoiceBox.getItems().addAll(aShowroomManager.getShowrooms());
+                if (aShowroomManager != null && !aShowroomManager.getShowroom().isEmpty()) {
+                    aRoomChoiceBox.getItems().addAll(aShowroomManager.getShowroom());
                 }
                 break;
             case ADD_ROOM, EDIT_ROOM:
-                if (aShowroomManager != null && !aShowroomManager.getShowrooms().isEmpty()) {
-                    aRoomChoiceBox.getItems().addAll(aShowroomManager.getShowrooms());
+                if (aShowroomManager != null && !aShowroomManager.getShowroom().isEmpty()) {
+                    aRoomChoiceBox.getItems().addAll(aShowroomManager.getShowroom());
                 }
                 break;
         }

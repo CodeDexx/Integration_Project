@@ -1,16 +1,16 @@
 # Grand View Movie Theatre System Design and Plan
 
 ## User Hierarchy
-- **Admin**: Full access to manage movies, showtimes, and user accounts.
-- **Manager**: Can manage showtimes and view reports.
+- **Admin**: Full access to manage movies, Showtime, and user accounts.
+- **Manager**: Can manage Showtime and view reports.
 - **Customer**: Can browse movies, book tickets, and manage bookings.
 
 ## Movie and Showtime Classes
 - **Movie Class**: Represents a movie with attributes like title, genre, duration, director, and cast.
   - Methods: `getMovieDetails()`, `updateMovie()`, `deleteMovie()`
 
-- **Showtime Class**: Represents showtimes for movies with attributes like movieID, showtime, and available seats.
-  - Methods: `getAvailableShowtimes()`, `bookTicket()`, `cancelTicket()`
+- **Showtime Class**: Represents Showtime for movies with attributes like movieID, showtime, and available seats.
+  - Methods: `getAvailableShowtime()`, `bookTicket()`, `cancelTicket()`
 
 ## Ticket System
 - **Ticket Class**: Represents a ticket with attributes like ticketID, customerID, showtimeID, and seat number.

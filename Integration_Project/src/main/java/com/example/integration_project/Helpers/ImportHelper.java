@@ -12,16 +12,17 @@ import java.util.function.BiFunction;
 
 /**
  * The {@code ImportHelper} class loads demo/sample data for the
- * movie theater system, including clients, movies, showrooms, and showtimes.
+ * movie theater system, including clients, movies, Showroom, and showtime.
  *
  * <p>This helper keeps your application clean by centralizing all
  * sample initialization logic in one place.</p>
  */
 public class ImportHelper {
 
-    // -------------------------------------------------------------
-    // CLIENTS
-    // -------------------------------------------------------------
+    /**
+     *
+     * @return
+     */
     public static List<Client> loadClients() {
         List<Client> clients = new ArrayList<>();
 
@@ -29,17 +30,32 @@ public class ImportHelper {
         clients.add(new Client("Laura Grey", "laura@yourcompany.com", "asdfgh"));
         clients.add(new Client("Craig Johnson", "craig@yourcompany.com", "zxcvbn"));
         clients.add(new Client("Mary Jenkins", "mary@yourcompany.com", "lkjhgfd"));
-        clients.add(new Client("James Smith", "JamesSmith@gmail.com", "mnbvcx"));
-        clients.add(new Client("Christopher Andersen", "ChristopherAnderson@gmail.com", "rghbnjk"));
+        clients.add(new Client("James Smith", "jamesSmith@gmail.com", "mnbvcx"));
+        clients.add(new Client("Christopher Andersen", "christopherAnderson@gmail.com", "rghbnjk"));
 
         return clients;
     }
 
-    // -------------------------------------------------------------
-    // MOVIES
-    // -------------------------------------------------------------
+    public static List<Ticket> loadTickets(List<Showtime> Showtime) {
+        List<Ticket> tickets = new ArrayList<>();
+
+        tickets.add(new Ticket("T002", Showtime.get(1)));
+        tickets.add(new Ticket("T003", Showtime.get(1)));
+        tickets.add(new Ticket("T004", Showtime.get(3)));
+        tickets.add(new Ticket("T005", Showtime.get(5)));
+
+        return tickets;
+    }
+
+
+
+    /**
+     *
+     * @return
+     */
     public static void loadMovies() {
         MovieManager  movieManagerInstance = MovieManager.getMovieManagerInstance();
+
 
         movieManagerInstance.addMovie(new Movie("SpiderMan"));
         movieManagerInstance.addMovie(new Movie("The Matrix"));
@@ -47,9 +63,9 @@ public class ImportHelper {
     }
 
     // -------------------------------------------------------------
-    // SHOWROOMS
+    // Showroom
     // -------------------------------------------------------------
-    public static void loadShowrooms() {
+    public static void loadShowroom() {
         ShowroomManager  rooms = ShowroomManager.getShowroomManagerInstance();
 
         rooms.addShowroom(new Showroom(101, 15));
@@ -62,7 +78,7 @@ public class ImportHelper {
     // -------------------------------------------------------------
     // SHOWTIME — rewritten for LocalDateTime compatibility
     // -------------------------------------------------------------
-    public static List<Showtime> loadShowtime(List<Movie> movies, List<Showroom> rooms) {
+    public static void loadShowtime(List<Movie> movies, List<Showroom> rooms) {
         ShowtimeManager showtime = ShowtimeManager.getShowtimeManagerInstance();
 
         // Lookup helpers
@@ -87,13 +103,13 @@ public class ImportHelper {
             return LocalDateTime.of(d, t);
         };
 
-        // Spider-Man showtimes
+        // Spider-Man Showtime
         showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("12/20/2025", "10:30 AM"), r101));
         showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("12/21/2025", "12:30 AM"), r101));
         showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("12/22/2025", "12:30 PM"), r101));
         showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("12/23/2025", "1:30 PM"), r101));
 
-        // Matrix showtimes
+        // Matrix Showtime
         showtime.addShowtime(new Showtime(matrix, buildDateTime.apply("12/24/2025", "10:30 AM"), r102));
         showtime.addShowtime(new Showtime(matrix, buildDateTime.apply("12/24/2025", "12:30 AM"), r103));
         showtime.addShowtime(new Showtime(matrix, buildDateTime.apply("12/24/2025", "12:30 PM"), r104));
@@ -101,28 +117,28 @@ public class ImportHelper {
         // Barbie showtime
         showtime.addShowtime(new Showtime(barbie, buildDateTime.apply("12/25/2025", "1:30 PM"), r105));
 
-        return showtime.getShowtimes();
+        //return showtime.getShowtime();
     }
 
     // -------------------------------------------------------------
     // FINDERS
     // -------------------------------------------------------------
     private static Movie findMovie(List<Movie> list, String name) {
+        
         for (Movie movie : list) {
             if (movie.getName().equals(name)) {
                 return movie;
             }
         }
         return null;
-
     }
-
-    private static Showroom findRoom(List<Showroom> list, int number) {
+    
+     private static Showroom findRoom(List<Showroom> list, int number) {
         for (Showroom room : list) {
             if (room.getRoomNumber() == number) {
                 return room;
             }
-        }
-        return null;
-    }
+    	}
+    	return null;
+    }   
 }

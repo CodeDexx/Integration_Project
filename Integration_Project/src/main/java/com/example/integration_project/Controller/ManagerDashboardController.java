@@ -9,7 +9,6 @@ import com.example.integration_project.Helpers.AlertHelper;
 import com.example.integration_project.Helpers.ImportHelper;
 import com.example.integration_project.Model.*;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,7 +24,7 @@ import javafx.stage.Stage;
 /**
  * Controller for manager-dashboard.fxml (Manager Dashboard) in the Movie Theater Management System.
  *
- * <p>This controller coordinates the main manager UI where Movies / Showtimes / Showrooms
+ * <p>This controller coordinates the main manager UI where Movies / Showtime / Showroom
  * are listed. It supports switching views between entity types, selecting items, and
  * launching the shared Add/Edit dialog implemented by {@link AddEditController}.</p>
  *
@@ -51,7 +50,7 @@ public class ManagerDashboardController {
     public enum DashboardView {
         MOVIES,
         SHOWTIME,
-        SHOWROOMS,
+        SHOWROOM,
         TICKETS
     }
     /** Label that displays the page title (set dynamically to the current view) */
@@ -62,7 +61,7 @@ public class ManagerDashboardController {
     @FXML
     private Button aLogoutButton;
 
-    /** Primary list view that displays Movies, Showtimes, or Showrooms (stores objects) */
+    /** Primary list view that displays Movies, Showtime, or Showroom (stores objects) */
     @FXML
     private ListView<Object> aListView;
 
@@ -72,7 +71,7 @@ public class ManagerDashboardController {
     /** Stage reference used for closing the window on logout */
     private Stage aStage;
 
-    /** The current view name: "Movies", "Showtime", or "Showrooms" */
+    /** The current view name: "Movies", "Showtime", or "Showroom" */
     private DashboardView aCurrentView = DashboardView.MOVIES;
 
     /** The currently selected item from the list view (a Movie, Showtime, or Showroom) */
@@ -95,14 +94,14 @@ public class ManagerDashboardController {
     private void initialize() {
         try{
             ImportHelper.loadMovies();
-            ImportHelper.loadShowrooms();
+            ImportHelper.loadShowroom();
             //ImportHelper.loadTickets();
             aMovieManager = MovieManager.getMovieManagerInstance();
             aShowroomManager = ShowroomManager.getShowroomManagerInstance();
             aShowtimeManager = ShowtimeManager.getShowtimeManagerInstance();
             aTicketManager = TicketManager.getInstance();
-            // Load showtimes once to populate the showtime manager
-            ImportHelper.loadShowtime(aMovieManager.getMovies(), aShowroomManager.getShowrooms());
+            // Load Showtime once to populate the showtime manager
+            ImportHelper.loadShowtime(aMovieManager.getMovies(), aShowroomManager.getShowroom());
 
             refreshView(aCurrentView);
         }catch(Exception e){
@@ -134,7 +133,7 @@ public class ManagerDashboardController {
      * Refreshes the ListView contents according to the currently selected view.
      * Uses the domain managers to retrieve the current collections.
      *
-     * @param pViewName the view to display ("Movies", "Showtime", "Showrooms")
+     * @param pViewName the view to display ("Movies", "Showtime", "Showroom")
      */
     private void refreshView(DashboardView pViewName) {
         // update title label where present
@@ -166,10 +165,10 @@ public class ManagerDashboardController {
 
                 aListView.getItems().clear();
 
-                ObservableList<Showtime> allShowtimes = aShowtimeManager.getShowtimes();
+                ObservableList<Showtime> allShowtime = aShowtimeManager.getShowtime();
                 List<Showtime> filtered = new ArrayList<>();
 
-                for (Showtime st : allShowtimes) {
+                for (Showtime st : allShowtime) {
                     if (st.getMovie() == selectedMovie) {
                         filtered.add(st);
                     }
@@ -180,7 +179,7 @@ public class ManagerDashboardController {
                 }
                 aListView.getItems().addAll(filtered);
             }
-            case SHOWROOMS -> {
+            case SHOWROOM -> {
                 aListView.getItems().clear();
 
                 // User must have selected a showtime
@@ -215,7 +214,7 @@ public class ManagerDashboardController {
                         );
 
                         // Show tickets per showtime
-                        for (Showtime st : aShowtimeManager.getShowtimes()) {
+                        for (Showtime st : aShowtimeManager.getShowtime()) {
                             if (st.getMovie() == movie) {
                                 long soldByShowtime = TicketManager.countByShowtime(aTicketList,st.toString());
                                 aListView.getItems().add(
@@ -269,13 +268,13 @@ public class ManagerDashboardController {
     }
 
     /**
-     * Switch to Showrooms view.
+     * Switch to Showroom view.
      *
-     * @param pEvent the ActionEvent triggered by the Showrooms button
+     * @param pEvent the ActionEvent triggered by the Showroom button
      */
     @FXML
     private void onShowroomsButtonClick(ActionEvent pEvent) {
-        this.aCurrentView = DashboardView.SHOWROOMS;
+        this.aCurrentView = DashboardView.SHOWROOM;
         refreshView(this.aCurrentView);
     }
 
@@ -291,7 +290,7 @@ public class ManagerDashboardController {
             switch (this.aCurrentView) {
                 case MOVIES -> openAddEditView(AddEditController.FormMode.ADD_MOVIE, null);
                 case SHOWTIME -> openAddEditView(AddEditController.FormMode.ADD_SHOWTIME, null);
-                case SHOWROOMS -> openAddEditView(AddEditController.FormMode.ADD_ROOM, null);
+                case SHOWROOM -> openAddEditView(AddEditController.FormMode.ADD_ROOM, null);
                 default -> AlertHelper.showErrorAlert("Add Error", "Invalid View", "Cannot add to view: " + aCurrentView);
             }
         } catch (Exception e) {
@@ -328,7 +327,7 @@ public class ManagerDashboardController {
                         AlertHelper.showErrorAlert("Type Error", "Invalid selection", "Selected item is not a Showtime.");
                     }
                 }
-                case SHOWROOMS -> {
+                case SHOWROOM -> {
                     if (this.aSelectedItem instanceof Showroom room) {
                         openAddEditView(AddEditController.FormMode.EDIT_ROOM, room);
                     } else {
@@ -373,7 +372,7 @@ public class ManagerDashboardController {
                         AlertHelper.showErrorAlert("Type Error", "Invalid selection", "Selected item is not a Showtime.");
                     }
                 }
-                case SHOWROOMS -> {
+                case SHOWROOM -> {
                     if (aSelectedItem instanceof Showroom room) {
                         aShowroomManager.removeShowroom(room);
                         AlertHelper.showInfoAlert("Delete", "Showroom Deleted", "Showroom has been deleted successfully.");

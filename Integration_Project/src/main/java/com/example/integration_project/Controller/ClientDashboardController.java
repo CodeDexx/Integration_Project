@@ -1,14 +1,18 @@
 package com.example.integration_project.Controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import com.example.integration_project.Helpers.AlertHelper;
-import com.example.integration_project.Helpers.ImportHelper;
+import com.example.integration_project.Helpers.*;
 import com.example.integration_project.Model.*;
 
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -33,7 +37,7 @@ public class ClientDashboardController {
     private Showtime aSelectedShowtime;
     private Showroom aSelectedShowroom;
 
-    /** Ordered lists to track showtime → showroom correctly */
+    /** Ordered lists to track showtime and showroom correctly */
     private final List<Showtime> aShowtimeList = new ArrayList<>();
     private final List<Showroom> aShowroomList = new ArrayList<>();
 
@@ -42,14 +46,13 @@ public class ClientDashboardController {
     @FXML
     private void initialize() {
         ImportHelper.loadMovies();
-        ImportHelper.loadShowrooms();
+        ImportHelper.loadShowroom();
 
         aMovieManager = MovieManager.getMovieManagerInstance();
         aShowroomManager = ShowroomManager.getShowroomManagerInstance();
         aShowtimeManager = ShowtimeManager.getShowtimeManagerInstance();
-
         aMoviesListView.setItems(aMovieManager.getMovies());
-        ImportHelper.loadShowtime(aMovieManager.getMovies(), aShowroomManager.getShowrooms());
+        ImportHelper.loadShowtime(aMovieManager.getMovies(), aShowroomManager.getShowroom());
 
         setupMovieSelection();
         setupDetailSelection();
@@ -71,7 +74,7 @@ public class ClientDashboardController {
 
         if (movie == null) return;
 
-        for (Showtime st : aShowtimeManager.getShowtimes()) {
+        for (Showtime st : aShowtimeManager.getShowtime()) {
             if (st.getMovie() == movie) {  // compare object references
                 Showroom room = st.getShowroom();
                 aShowtimeList.add(st);
@@ -89,7 +92,7 @@ public class ClientDashboardController {
         }
 
         if (aDetailsListView.getItems().isEmpty()) {
-            aDetailsListView.getItems().add("No showtimes available for this movie.");
+            aDetailsListView.getItems().add("No Showtime available for this movie.");
         }
     }
 
@@ -150,6 +153,9 @@ public class ClientDashboardController {
         return showroom.getCapacity() - booked;
     }
 
+    /**
+     * Closes the dashboard window (logout).
+     */
     @FXML
     private void onLogoutButtonClick() {
         aStage = (Stage) aLogoutButton.getScene().getWindow();

@@ -4,18 +4,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- * Manages the collection of showtimes in the theater system.
- * Handles adding, removing, and retrieving showtimes.
+ * Manages the collection of Showtime in the theater system.
+ * Handles adding, removing, and retrieving Showtime.
  * 
  * @author Ian
  * @version 1.0
  */
 public class ShowtimeManager {
-    private final ObservableList<Showtime> showtime;
+    private static ObservableList<Showtime> showtime;
 
     private static ShowtimeManager aInstance;
 
-    private ShowtimeManager() {
+    public ShowtimeManager() {
         showtime = FXCollections.observableArrayList();
     }
 
@@ -27,11 +27,11 @@ public class ShowtimeManager {
     }
 
     /**
-     * Gets the list of all showtimes.
+     * Gets the list of all Showtime.
      * 
-     * @return an ObservableList containing all showtimes
+     * @return an ObservableList containing all Showtime
      */
-    public ObservableList<Showtime> getShowtimes() {
+    public static ObservableList<Showtime> getShowtime() {
         return showtime;
     }
 
