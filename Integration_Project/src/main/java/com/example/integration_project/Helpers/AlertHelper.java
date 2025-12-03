@@ -1,9 +1,7 @@
 package com.example.integration_project.Helpers;
 
 import com.example.integration_project.Model.Ticket;
-import javafx.application.Application;
 import javafx.scene.control.Alert;
-import javafx.stage.Stage;
 
 public class AlertHelper {
 

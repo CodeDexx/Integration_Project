@@ -32,10 +32,10 @@ public class Ticket {
     public String getaTicketID() {
         return aTicketID;
     }
-    public String getaMovieName() {
+    public String getName() {
         return aMovieName;
     }
-    public String getaShowtime() {
+    public String getTime() {
         return aShowtime;
     }
     public LocalDate getaPurchaseDateTime() {

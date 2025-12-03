@@ -11,11 +11,11 @@ import javafx.collections.ObservableList;
  * @version 1.0
  */
 public class ShowroomManager {
-    private final ObservableList<Showroom> showrooms;
+    private final ObservableList<Showrooms> showrooms;
 
     private static ShowroomManager aInstance;
 
-    private ShowroomManager() {
+    public ShowroomManager() {
         showrooms = FXCollections.observableArrayList();
     }
 
@@ -30,7 +30,7 @@ public class ShowroomManager {
      * 
      * @return an ObservableList containing all showrooms
      */
-    public ObservableList<Showroom> getShowrooms() {
+    public ObservableList<Showrooms> getShowrooms() {
         return showrooms;
     }
 
@@ -40,7 +40,7 @@ public class ShowroomManager {
      * @param showroom the showroom to add
      * @throws IllegalArgumentException if showroom is null
      */
-    public void addShowroom(Showroom showroom) {
+    public void addShowroom(Showrooms showroom) {
         if (showroom == null) {
             throw new IllegalArgumentException("Showroom cannot be null");
         }
@@ -53,7 +53,7 @@ public class ShowroomManager {
      * @param showroom the showroom to remove
      * @throws IllegalArgumentException if showroom is null
      */
-    public void removeShowroom(Showroom showroom) {
+    public void removeShowroom(Showrooms showroom) {
         if (showroom == null) {
             throw new IllegalArgumentException("Showroom cannot be null");
         }

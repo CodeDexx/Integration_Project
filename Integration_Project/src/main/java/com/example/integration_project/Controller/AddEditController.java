@@ -14,9 +14,9 @@ import java.time.LocalTime;
 import com.example.integration_project.Helpers.AlertHelper;
 import com.example.integration_project.Model.Movie;
 import com.example.integration_project.Model.MovieManager;
-import com.example.integration_project.Model.Showroom;
+import com.example.integration_project.Model.Showrooms;
 import com.example.integration_project.Model.ShowroomManager;
-import com.example.integration_project.Model.Showtime;
+import com.example.integration_project.Model.Showtimes;
 import com.example.integration_project.Model.ShowtimeManager;
 
 /**
@@ -46,8 +46,8 @@ import com.example.integration_project.Model.ShowtimeManager;
  * @version 1.0
  * @see FormMode
  * @see Movie
- * @see Showtime
- * @see Showroom
+ * @see Showtimes
+ * @see Showrooms
  * @see MovieManager
  * @see ShowtimeManager
  * @see ShowroomManager
@@ -122,7 +122,7 @@ public class AddEditController {
     
     /** Choice box for selecting a Showroom when adding or editing a Showtime */
     @FXML
-    private ChoiceBox<Showroom> aRoomChoiceBox;
+    private ChoiceBox<Showrooms> aRoomChoiceBox;
     
     /** Button to save changes or create a new object */
     @FXML
@@ -397,14 +397,14 @@ public class AddEditController {
                 aNameTextField.setText(movie.getName());
                 break;
             case EDIT_SHOWTIME:
-                Showtime showtime = (Showtime) aCurrentObject;
+                Showtimes showtime = (Showtimes) aCurrentObject;
                 aMovieChoiceBox.setValue(showtime.getMovie());
                 aDatePicker.setValue(showtime.getDate());
                 aTimeTextField.setText(showtime.getTime());
                 aRoomChoiceBox.setValue(showtime.getShowroom());
                 break;
             case EDIT_ROOM:
-                Showroom room = (Showroom) aCurrentObject;
+                Showrooms room = (Showrooms) aCurrentObject;
                 aNameTextField.setText(String.valueOf(room.getRoomNumber()));
                 aCapacityTextField.setText(String.valueOf(room.getCapacity()));
                 break;
@@ -527,7 +527,7 @@ public class AddEditController {
                         
                         // Create Showtime
                         Movie movie = aMovieChoiceBox.getValue();
-                        Showroom room = aRoomChoiceBox.getValue();
+                        Showrooms room = aRoomChoiceBox.getValue();
                         LocalDate date = aDatePicker.getValue();
                         String timeStr = aTimeTextField.getText().trim();
                         
@@ -535,7 +535,7 @@ public class AddEditController {
                         LocalTime time = LocalTime.parse(timeStr);
                         LocalDateTime dateTime = LocalDateTime.of(date, time);
                         
-                        Showtime newShowtime = new Showtime(movie, dateTime, room);
+                        Showtimes newShowtime = new Showtimes(movie, dateTime, room);
                         aShowtimeManager.addShowtime(newShowtime);
                         AlertHelper.showInfoAlert("Success", "Showtime Added", 
                             "Showtime has been added successfully");
@@ -571,7 +571,7 @@ public class AddEditController {
                             return;
                         }
                         
-                        Showtime showtime = (Showtime) aCurrentObject;
+                        Showtimes showtime = (Showtimes) aCurrentObject;
                         showtime.setMovie(aMovieChoiceBox.getValue());
                         showtime.setShowroom(aRoomChoiceBox.getValue());
                         showtime.setDate(aDatePicker.getValue());
@@ -600,7 +600,7 @@ public class AddEditController {
                     int roomNumber = Integer.parseInt(roomNumberStr);
                     int capacity = Integer.parseInt(capacityStr);
                     
-                    Showroom newRoom = new Showroom(roomNumber, capacity);
+                    Showrooms newRoom = new Showrooms(roomNumber, capacity);
                     aShowroomManager.addShowroom(newRoom);
                     AlertHelper.showInfoAlert("Success", "Room Added", 
                         "Room has been added successfully");
@@ -626,7 +626,7 @@ public class AddEditController {
                     int roomNumber = Integer.parseInt(roomNumberStr);
                     int capacity = Integer.parseInt(capacityStr);
                     
-                    Showroom room = (Showroom) aCurrentObject;
+                    Showrooms room = (Showrooms) aCurrentObject;
                     room.setRoomNumber(roomNumber);
                     room.setRoomCapacity(capacity);
                     AlertHelper.showInfoAlert("Success", "Room Updated", 

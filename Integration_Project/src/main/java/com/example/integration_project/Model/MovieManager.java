@@ -15,7 +15,7 @@ public class MovieManager {
 
     private static MovieManager aInstance;
 
-    private MovieManager() {
+    public MovieManager() {
         movies = FXCollections.observableArrayList();
     }
 

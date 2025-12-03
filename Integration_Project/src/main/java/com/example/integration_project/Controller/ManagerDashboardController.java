@@ -6,9 +6,9 @@ import java.util.Objects;
 import com.example.integration_project.Helpers.AlertHelper;
 import com.example.integration_project.Model.Movie;
 import com.example.integration_project.Model.MovieManager;
-import com.example.integration_project.Model.Showroom;
+import com.example.integration_project.Model.Showrooms;
 import com.example.integration_project.Model.ShowroomManager;
-import com.example.integration_project.Model.Showtime;
+import com.example.integration_project.Model.Showtimes;
 import com.example.integration_project.Model.ShowtimeManager;
 import com.example.integration_project.Model.Manager;
 
@@ -231,14 +231,14 @@ public class ManagerDashboardController {
                     }
                 }
                 case SHOWTIME -> {
-                    if (this.aSelectedItem instanceof Showtime showtime) {
+                    if (this.aSelectedItem instanceof Showtimes showtime) {
                         openAddEditView(AddEditController.FormMode.EDIT_SHOWTIME, showtime);
                     } else {
                         AlertHelper.showErrorAlert("Type Error", "Invalid selection", "Selected item is not a Showtime.");
                     }
                 }
                 case SHOWROOMS -> {
-                    if (this.aSelectedItem instanceof Showroom room) {
+                    if (this.aSelectedItem instanceof Showrooms room) {
                         openAddEditView(AddEditController.FormMode.EDIT_ROOM, room);
                     } else {
                         AlertHelper.showErrorAlert("Type Error", "Invalid selection", "Selected item is not a Showroom.");
@@ -275,7 +275,7 @@ public class ManagerDashboardController {
                     }
                 }
                 case SHOWTIME-> {
-                    if (aSelectedItem instanceof Showtime showtime) {
+                    if (aSelectedItem instanceof Showtimes showtime) {
                         aShowtimeManager.removeShowtime(showtime);
                         AlertHelper.showInfoAlert("Delete", "Showtime Deleted", "Showtime has been deleted successfully.");
                     } else {
@@ -283,7 +283,7 @@ public class ManagerDashboardController {
                     }
                 }
                 case SHOWROOMS -> {
-                    if (aSelectedItem instanceof Showroom room) {
+                    if (aSelectedItem instanceof Showrooms room) {
                         aShowroomManager.removeShowroom(room);
                         AlertHelper.showInfoAlert("Delete", "Showroom Deleted", "Showroom has been deleted successfully.");
                     } else {

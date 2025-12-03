@@ -8,9 +8,9 @@ import java.util.UUID;
 import com.example.integration_project.Helpers.AlertHelper;
 import com.example.integration_project.Model.Movie;
 import com.example.integration_project.Model.MovieManager;
-import com.example.integration_project.Model.Showroom;
+import com.example.integration_project.Model.Showrooms;
 import com.example.integration_project.Model.ShowroomManager;
-import com.example.integration_project.Model.Showtime;
+import com.example.integration_project.Model.Showtimes;
 import com.example.integration_project.Model.ShowtimeManager;
 import com.example.integration_project.Model.Ticket;
 
@@ -30,11 +30,11 @@ public class ClientDashboardController {
     private ShowroomManager aShowroomManager;// = ShowroomManager.getShowrooms();
 
     private Movie aSelectedMovie;
-    private Showtime aSelectedShowtime;
-    private Showroom aSelectedShowroom;
+    private Showtimes aSelectedShowtime;
+    private Showrooms aSelectedShowroom;
 
     /** Showtime , Showroom */
-    private final HashMap<Showtime, Showroom> aShowTimeRoom = new HashMap<>();
+    private final HashMap<Showtimes, Showrooms> aShowTimeRoom = new HashMap<>();
 
 
     @FXML
@@ -62,15 +62,15 @@ public class ClientDashboardController {
         if (movie == null) return;
 
         List<Movie> movies = aMovieManager.getMovies();
-        List<Showtime> showtimes = aShowtimeManager.getShowtimes();
-        List<Showroom> showrooms = aShowroomManager.getShowrooms();
+        List<Showtimes> showtimes = aShowtimeManager.getShowtimes();
+        List<Showrooms> showrooms = aShowroomManager.getShowrooms();
 
         for (int i = 0; i < movies.size(); i++) {
             if (!movies.get(i).getName().equals(movie.getName()))
                 continue;
 
-            Showtime showtime = showtimes.get(i);
-            Showroom sr = showrooms.get(i);
+            Showtimes showtime = showtimes.get(i);
+            Showrooms sr = showrooms.get(i);
 
             aShowTimeRoom.put(showtime, sr);
 
@@ -93,8 +93,8 @@ public class ClientDashboardController {
                 return;
             }
 
-            Showtime st = aShowTimeRoom.keySet().stream().toList().get(index);
-            Showroom sr = aShowTimeRoom.get(st);
+            Showtimes st = aShowTimeRoom.keySet().stream().toList().get(index);
+            Showrooms sr = aShowTimeRoom.get(st);
 
             aSelectedShowtime = st;
             aSelectedShowroom = sr;
@@ -141,7 +141,7 @@ public class ClientDashboardController {
     }
 
     // Method to calculate remaining seats in Showroom at a given Showtime for a Movie
-    public int calculateRemainingSeats(Showroom showroom, Showtime showtime) {
+    public int calculateRemainingSeats(Showrooms showroom, Showtimes showtime) {
         // For simplicity, we assume the showroom's capacity is the total seats available
         // In a real application, you would check booked tickets for that showtime
         // and subtract from the showroom's capacity
