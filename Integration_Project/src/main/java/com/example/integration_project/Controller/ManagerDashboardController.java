@@ -7,13 +7,7 @@ import java.util.Objects;
 
 import com.example.integration_project.Helpers.AlertHelper;
 import com.example.integration_project.Helpers.ImportHelper;
-import com.example.integration_project.Model.Movie;
-import com.example.integration_project.Model.MovieManager;
-import com.example.integration_project.Model.Showrooms;
-import com.example.integration_project.Model.ShowroomManager;
-import com.example.integration_project.Model.Showtimes;
-import com.example.integration_project.Model.ShowtimeManager;
-import com.example.integration_project.Model.Manager;
+import com.example.integration_project.Model.*;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
