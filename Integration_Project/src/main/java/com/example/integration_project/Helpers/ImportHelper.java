@@ -51,51 +51,44 @@ public class ImportHelper {
      *
      * @return
      */
-    public static List<Movie> loadMovies() {
-        List<Movie> movies = new ArrayList<>();
+    public static void loadMovies() {
+        MovieManager  movieManagerInstance = MovieManager.getMovieManagerInstance();
 
-        movies.add(new Movie("SpiderMan"));
-        movies.add(new Movie("The Matrix"));
-        movies.add(new Movie("Barbie"));
 
-        return movies;
+        movieManagerInstance.addMovie(new Movie("SpiderMan"));
+        movieManagerInstance.addMovie(new Movie("The Matrix"));
+        movieManagerInstance.addMovie(new Movie("Barbie"));
     }
 
-    /**
-     *
-     * @return
-     */
-    public static List<Showrooms> loadShowrooms() {
-        List<Showrooms> rooms = new ArrayList<>();
+    // -------------------------------------------------------------
+    // SHOWROOMS
+    // -------------------------------------------------------------
+    public static void loadShowrooms() {
+        ShowroomManager  rooms = ShowroomManager.getShowroomManagerInstance();
 
-        rooms.add(new Showrooms(101, 15));
-        rooms.add(new Showrooms(102, 19));
-        rooms.add(new Showrooms(103, 20));
-        rooms.add(new Showrooms(104, 21));
-        rooms.add(new Showrooms(105, 22));
-
-        return rooms;
+        rooms.addShowroom(new Showroom(101, 15));
+        rooms.addShowroom(new Showroom(102, 19));
+        rooms.addShowroom(new Showroom(103, 20));
+        rooms.addShowroom(new Showroom(104, 21));
+        rooms.addShowroom(new Showroom(105, 22));
     }
 
-    /**
-     *
-     * @param movies
-     * @param rooms
-     * @return
-     */
-    public static List<Showtimes> loadShowtime(List<Movie> movies, List<Showrooms> rooms) {
-        List<Showtimes> showtime = new ArrayList<>();
+    // -------------------------------------------------------------
+    // SHOWTIME — rewritten for LocalDateTime compatibility
+    // -------------------------------------------------------------
+    public static List<Showtime> loadShowtime(List<Movie> movies, List<Showroom> rooms) {
+        ShowtimeManager showtime = ShowtimeManager.getShowtimeManagerInstance();
 
         // Lookup helpers
         Movie spiderman = findMovie(movies, "SpiderMan");
         Movie matrix = findMovie(movies, "The Matrix");
         Movie barbie = findMovie(movies, "Barbie");
 
-        Showrooms r101 = findRoom(rooms, 101);
-        Showrooms r102 = findRoom(rooms, 102);
-        Showrooms r103 = findRoom(rooms, 103);
-        Showrooms r104 = findRoom(rooms, 104);
-        Showrooms r105 = findRoom(rooms, 105);
+        Showroom r101 = findRoom(rooms, 101);
+        Showroom r102 = findRoom(rooms, 102);
+        Showroom r103 = findRoom(rooms, 103);
+        Showroom r104 = findRoom(rooms, 104);
+        Showroom r105 = findRoom(rooms, 105);
 
         // Formatters for parsing
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
@@ -108,46 +101,42 @@ public class ImportHelper {
             return LocalDateTime.of(d, t);
         };
 
-        // Spider-Man showtime
-        showtime.add(new Showtimes(spiderman, buildDateTime.apply("11/20/2025", "10:30 AM"), r101));
-        showtime.add(new Showtimes(spiderman, buildDateTime.apply("11/21/2025", "11:30 AM"), r101));
-        showtime.add(new Showtimes(spiderman, buildDateTime.apply("11/22/2025", "12:30 PM"), r101));
-        showtime.add(new Showtimes(spiderman, buildDateTime.apply("11/23/2025", "1:30 PM"), r101));
+        // Spider-Man showtimes
+        showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("12/20/2025", "10:30 AM"), r101));
+        showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("12/21/2025", "12:30 AM"), r101));
+        showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("12/22/2025", "12:30 PM"), r101));
+        showtime.addShowtime(new Showtime(spiderman, buildDateTime.apply("12/23/2025", "1:30 PM"), r101));
 
-        // Matrix showtime
-        showtime.add(new Showtimes(matrix, buildDateTime.apply("11/24/2025", "10:30 AM"), r102));
-        showtime.add(new Showtimes(matrix, buildDateTime.apply("11/24/2025", "11:30 AM"), r103));
-        showtime.add(new Showtimes(matrix, buildDateTime.apply("11/24/2025", "12:30 PM"), r104));
+        // Matrix showtimes
+        showtime.addShowtime(new Showtime(matrix, buildDateTime.apply("12/24/2025", "10:30 AM"), r102));
+        showtime.addShowtime(new Showtime(matrix, buildDateTime.apply("12/24/2025", "12:30 AM"), r103));
+        showtime.addShowtime(new Showtime(matrix, buildDateTime.apply("12/24/2025", "12:30 PM"), r104));
 
         // Barbie showtime
-        showtime.add(new Showtimes(barbie, buildDateTime.apply("11/25/2025", "1:30 PM"), r105));
+        showtime.addShowtime(new Showtime(barbie, buildDateTime.apply("12/25/2025", "1:30 PM"), r105));
 
-        return showtime;
+        return showtime.getShowtimes();
     }
 
-    /**
-     *
-     * @param list
-     * @param name
-     * @return
-     */
+    // -------------------------------------------------------------
+    // FINDERS
+    // -------------------------------------------------------------
     private static Movie findMovie(List<Movie> list, String name) {
-        return list.stream()
-                .filter(movie -> movie.getName().equals(name))
-                .findFirst()
-                .orElse(null);
+        
+        for (Movie movie : list) {
+            if (movie.getName().equals(name)) {
+                return movie;
+            }
+        }
+        return null;
     }
-
-    /**
-     *
-     * @param list
-     * @param number
-     * @return
-     */
-    private static Showrooms findRoom(List<Showrooms> list, int number) {
-        return list.stream()
-                .filter(room -> room.getRoomNumber() == number)
-                .findFirst()
-                .orElse(null);
-    }
+    
+     private static Showroom findRoom(List<Showroom> list, int number) {
+        for (Showroom room : list) {
+            if (room.getRoomNumber() == number) {
+                return room;
+            }
+    	}
+    	return null;
+    }   
 }
