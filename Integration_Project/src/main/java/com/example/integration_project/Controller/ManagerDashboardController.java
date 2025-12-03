@@ -273,7 +273,7 @@ public class ManagerDashboardController {
      * @param pEvent the ActionEvent triggered by the Showroom button
      */
     @FXML
-    private void onShowroomsButtonClick(ActionEvent pEvent) {
+    private void onShowroomButtonClick(ActionEvent pEvent) {
         this.aCurrentView = DashboardView.SHOWROOM;
         refreshView(this.aCurrentView);
     }
