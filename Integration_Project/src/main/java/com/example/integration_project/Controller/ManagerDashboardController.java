@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Objects;
 
 import com.example.integration_project.Helpers.AlertHelper;
-import com.example.integration_project.Helpers.ImportHelper;
 import com.example.integration_project.Model.*;
 
 import javafx.collections.ObservableList;
@@ -65,9 +64,6 @@ public class ManagerDashboardController {
     @FXML
     private ListView<Object> aListView;
 
-    /** The currently logged-in manager (maybe null if not logged in) */
-    private Manager aManager;
-
     /** Stage reference used for closing the window on logout */
     private Stage aStage;
 
@@ -82,9 +78,8 @@ public class ManagerDashboardController {
     private ShowtimeManager aShowtimeManager;
     private ShowroomManager aShowroomManager;
     private TicketManager aTicketManager;
-    private List<Ticket> aTickets;
 
-    List<Ticket> aTicketList = TicketManager.getInstance().getTickets();
+    private List<Ticket> aTicketList;
 
     /**
      * JavaFX initialize method. Sets up selection listener and refreshes initial view.
@@ -93,30 +88,19 @@ public class ManagerDashboardController {
     @FXML
     private void initialize() {
         try{
-            ImportHelper.loadMovies();
-            ImportHelper.loadShowroom();
-            //ImportHelper.loadTickets();
+
             aMovieManager = MovieManager.getMovieManagerInstance();
             aShowroomManager = ShowroomManager.getShowroomManagerInstance();
             aShowtimeManager = ShowtimeManager.getShowtimeManagerInstance();
+
+            aTicketList = TicketManager.getInstance().getTickets();
             aTicketManager = TicketManager.getInstance();
-            // Load Showtime once to populate the showtime manager
-            ImportHelper.loadShowtime(aMovieManager.getMovies(), aShowroomManager.getShowroom());
 
             refreshView(aCurrentView);
         }catch(Exception e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error" + e.getMessage());
         }
-    }
-
-    /**
-     * Sets the current manager (logged-in user). Call this from the code that opens the dashboard.
-     *
-     * @param pManager the Manager who is logged in
-     */
-    public void setManager(Manager pManager) {
-        this.aManager = pManager;
     }
 
     /**
@@ -147,9 +131,9 @@ public class ManagerDashboardController {
 
         switch (pViewName) {
             case MOVIES -> {
-                if (!aMovieManager.getMovies().isEmpty()) {
+                if (!MovieManager.getMovies().isEmpty()) {
                     aListView.getItems().clear();
-                    aListView.getItems().addAll(aMovieManager.getMovies());
+                    aListView.getItems().addAll(MovieManager.getMovies());
                 } else {
                     AlertHelper.showErrorAlert("Movies Error","Add Movies","No Movies exist for this Movie Theater. \n Click Add to create some!");
                 }
@@ -158,14 +142,17 @@ public class ManagerDashboardController {
 
                 // Must select a movie first
                 if (!(aSelectedItem instanceof Movie selectedMovie)) {
+                    // No selected Movie; back to the Movie view
+                    aListView.getItems().add("Select a Movie please");
 
-                    aListView.getItems().addAll(aMovieManager.getMovies());
+                    onMoviesButtonClick();
+
                     return;
                 }
 
                 aListView.getItems().clear();
 
-                ObservableList<Showtime> allShowtime = aShowtimeManager.getShowtime();
+                ObservableList<Showtime> allShowtime = ShowtimeManager.getShowtime();
                 List<Showtime> filtered = new ArrayList<>();
 
                 for (Showtime st : allShowtime) {
@@ -206,15 +193,15 @@ public class ManagerDashboardController {
             case TICKETS -> {
                 aListView.getItems().clear();
 
-                if (!aMovieManager.getMovies().isEmpty()) {
-                    for (Movie movie : aMovieManager.getMovies()) {
+                if (!MovieManager.getMovies().isEmpty()) {
+                    for (Movie movie : MovieManager.getMovies()) {
                         long soldByMovie = TicketManager.countByMovie(aTicketList,movie.getName());
                         aListView.getItems().add(
                                 "Movie: " + movie.getName() + " | Tickets Sold: " + soldByMovie
                         );
 
                         // Show tickets per showtime
-                        for (Showtime st : aShowtimeManager.getShowtime()) {
+                        for (Showtime st : ShowtimeManager.getShowtime()) {
                             if (st.getMovie() == movie) {
                                 long soldByShowtime = TicketManager.countByShowtime(aTicketList,st.toString());
                                 aListView.getItems().add(
@@ -237,10 +224,9 @@ public class ManagerDashboardController {
     /**
      * Switch to Movies view.
      *
-     * @param pEvent the ActionEvent triggered by the Movies button
      */
     @FXML
-    private void onMoviesButtonClick(ActionEvent pEvent) {
+    private void onMoviesButtonClick() {
         this.aCurrentView = DashboardView.MOVIES;
         refreshView(this.aCurrentView);
     }
@@ -270,10 +256,9 @@ public class ManagerDashboardController {
     /**
      * Switch to Showroom view.
      *
-     * @param pEvent the ActionEvent triggered by the Showroom button
      */
     @FXML
-    private void onShowroomButtonClick(ActionEvent pEvent) {
+    private void onShowroomButtonClick() {
         this.aCurrentView = DashboardView.SHOWROOM;
         refreshView(this.aCurrentView);
     }
@@ -380,14 +365,6 @@ public class ManagerDashboardController {
                         AlertHelper.showErrorAlert("Type Error", "Invalid selection", "Selected item is not a Showroom.");
                     }
                 }
-//                case TICKETS -> {
-//                    if (aSelectedItem instanceof Showroom room) {
-//                        aTicketManager.removeShowroom(room);
-//                        AlertHelper.showInfoAlert("Delete", "Showroom Deleted", "Showroom has been deleted successfully.");
-//                    } else {
-//                        AlertHelper.showErrorAlert("Type Error", "Invalid selection", "Selected item is not a Showroom.");
-//                    }
-//                }
                 default -> AlertHelper.showErrorAlert("Delete Error", "Invalid View", aCurrentView.toString());
             }
         } catch (Exception e) {

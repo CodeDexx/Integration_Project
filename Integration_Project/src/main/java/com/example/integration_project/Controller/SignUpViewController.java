@@ -2,6 +2,8 @@ package com.example.integration_project.Controller;
 
 import com.example.integration_project.Helpers.AlertHelper;
 import com.example.integration_project.Helpers.AlertHelper.EmailValidator;
+import com.example.integration_project.Model.Client;
+import com.example.integration_project.Model.ClientManager;
 import com.example.integration_project.Model.User;
 import com.example.integration_project.MovieTheatreApplication;
 import javafx.fxml.FXML;
@@ -69,11 +71,16 @@ public class SignUpViewController {
         }
 
         try {
-            new User(name, password, email);
 
-            AlertHelper.showInfoAlert("Account Created", "User Successfully Created","Your account has been created successfully");
+            Client newClient = new Client(name, email, password);
+
+            // Saving the new client
+            ClientManager.getInstance().addClient(newClient);
+
+            AlertHelper.showInfoAlert("Account Created", "Success", "Your account has been created!");
 
             returnToClientDashboard();
+
         } catch (Exception e) {
             AlertHelper.showErrorAlert("Error", "Could not create account", e.getMessage());
         }

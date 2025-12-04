@@ -1,18 +1,14 @@
 package com.example.integration_project.Controller;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.UUID;
 
 import com.example.integration_project.Helpers.*;
 import com.example.integration_project.Model.*;
 
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -29,10 +25,6 @@ public class ClientDashboardController {
     @FXML
     private Button aLogoutButton;
 
-    private MovieManager aMovieManager;
-    private ShowtimeManager aShowtimeManager;
-    private ShowroomManager aShowroomManager;
-
     private Movie aSelectedMovie;
     private Showtime aSelectedShowtime;
     private Showroom aSelectedShowroom;
@@ -45,14 +37,8 @@ public class ClientDashboardController {
 
     @FXML
     private void initialize() {
-        ImportHelper.loadMovies();
-        ImportHelper.loadShowroom();
 
-        aMovieManager = MovieManager.getMovieManagerInstance();
-        aShowroomManager = ShowroomManager.getShowroomManagerInstance();
-        aShowtimeManager = ShowtimeManager.getShowtimeManagerInstance();
-        aMoviesListView.setItems(aMovieManager.getMovies());
-        ImportHelper.loadShowtime(aMovieManager.getMovies(), aShowroomManager.getShowroom());
+        aMoviesListView.setItems(MovieManager.getMovies());
 
         setupMovieSelection();
         setupDetailSelection();
@@ -74,7 +60,7 @@ public class ClientDashboardController {
 
         if (movie == null) return;
 
-        for (Showtime st : aShowtimeManager.getShowtime()) {
+        for (Showtime st : ShowtimeManager.getShowtime()) {
             if (st.getMovie() == movie) {  // compare object references
                 Showroom room = st.getShowroom();
                 aShowtimeList.add(st);
