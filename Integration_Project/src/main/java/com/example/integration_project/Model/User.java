@@ -1,6 +1,6 @@
 package com.example.integration_project.Model;
 
-/**
+/**<h1>User class</h1>
  * Represents a user with a name, email address, and password.
  * <p>
  * This class provides constructors for creating a user with either a name, email, and password,
