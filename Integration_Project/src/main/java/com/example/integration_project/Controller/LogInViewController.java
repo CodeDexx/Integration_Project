@@ -4,6 +4,7 @@ import com.example.integration_project.Helpers.AlertHelper;
 import com.example.integration_project.Helpers.ImportHelper;
 import com.example.integration_project.Helpers.AlertHelper.EmailValidator;
 import com.example.integration_project.Model.Client;
+import com.example.integration_project.Model.ClientManager;
 import com.example.integration_project.Model.Manager;
 import com.example.integration_project.MovieTheatreApplication;
 import javafx.fxml.FXML;
@@ -33,9 +34,6 @@ public class LogInViewController {
     /** Hardcoded manager account used for authentication. */
     private final Manager MANAGER_ACCOUNT = new Manager("manager@grandview.ca", "Fall2025");
 
-    /** List of clients from ImportHelper */
-    private final List<Client> aClientList = ImportHelper.loadClients();
-
     /** TextField for entering the user's email. */
     @FXML
     private TextField aEmailTextField;
@@ -60,6 +58,8 @@ public class LogInViewController {
     @FXML
     private void initialize() {
         aSignupButton.setText("Create Account");
+
+        ImportHelper.loadClients(); // loads list of clients from ImportHelper into ClientManager
     }
 
     /**
@@ -93,7 +93,7 @@ public class LogInViewController {
 
         Client foundClient = null;
 
-        for (Client client : aClientList) {
+        for (Client client : ClientManager.getInstance().getClients()) {
             if (client.getEmailAddress().equalsIgnoreCase(email) &&
                     client.getPassword().equals(password)) {
 

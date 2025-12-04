@@ -45,7 +45,7 @@ public class ShowtimeManager {
         if (showtime == null) {
             throw new IllegalArgumentException("Showtime cannot be null");
         }
-        this.showtime.add(showtime);
+        ShowtimeManager.showtime.add(showtime);
     }
 
     /**
@@ -58,6 +58,6 @@ public class ShowtimeManager {
         if (showtime == null) {
             throw new IllegalArgumentException("Showtime cannot be null");
         }
-        this.showtime.remove(showtime);
+        ShowtimeManager.showtime.remove(showtime);
     }
 }

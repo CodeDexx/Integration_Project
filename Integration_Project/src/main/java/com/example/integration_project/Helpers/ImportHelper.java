@@ -23,28 +23,25 @@ public class ImportHelper {
      *
      * @return
      */
-    public static List<Client> loadClients() {
-        List<Client> clients = new ArrayList<>();
+    public static void loadClients() {
+        ClientManager clients= ClientManager.getInstance();
+        clients.addClient(new Client("Rachel Booker", "rachel@yourcompany.com", "qwertyu"));
+        clients.addClient(new Client("Laura Grey", "laura@yourcompany.com", "asdfgh"));
+        clients.addClient(new Client("Craig Johnson", "craig@yourcompany.com", "zxcvbn"));
+        clients.addClient(new Client("Mary Jenkins", "mary@yourcompany.com", "lkjhgfd"));
+        clients.addClient(new Client("James Smith", "jamesSmith@gmail.com", "mnbvcx"));
+        clients.addClient(new Client("Christopher Andersen", "christopherAnderson@gmail.com", "rghbnjk"));
 
-        clients.add(new Client("Rachel Booker", "rachel@yourcompany.com", "qwertyu"));
-        clients.add(new Client("Laura Grey", "laura@yourcompany.com", "asdfgh"));
-        clients.add(new Client("Craig Johnson", "craig@yourcompany.com", "zxcvbn"));
-        clients.add(new Client("Mary Jenkins", "mary@yourcompany.com", "lkjhgfd"));
-        clients.add(new Client("James Smith", "jamesSmith@gmail.com", "mnbvcx"));
-        clients.add(new Client("Christopher Andersen", "christopherAnderson@gmail.com", "rghbnjk"));
-
-        return clients;
     }
 
-    public static List<Ticket> loadTickets(List<Showtime> Showtime) {
-        List<Ticket> tickets = new ArrayList<>();
+    public static void loadTickets() {
+        TicketManager  ticketManagerInstance = TicketManager.getInstance();
+        List<Showtime> Showtime = ShowtimeManager.getShowtime();
 
-        tickets.add(new Ticket("T002", Showtime.get(1)));
-        tickets.add(new Ticket("T003", Showtime.get(1)));
-        tickets.add(new Ticket("T004", Showtime.get(3)));
-        tickets.add(new Ticket("T005", Showtime.get(5)));
-
-        return tickets;
+        ticketManagerInstance.addTicket(new Ticket("T002", Showtime.get(1)));
+        ticketManagerInstance.addTicket(new Ticket("T003", Showtime.get(1)));
+        ticketManagerInstance.addTicket(new Ticket("T004", Showtime.get(3)));
+        ticketManagerInstance.addTicket(new Ticket("T005", Showtime.get(5)));
     }
 
 
@@ -78,8 +75,10 @@ public class ImportHelper {
     // -------------------------------------------------------------
     // SHOWTIME — rewritten for LocalDateTime compatibility
     // -------------------------------------------------------------
-    public static void loadShowtime(List<Movie> movies, List<Showroom> rooms) {
+    public static void loadShowtime() {
         ShowtimeManager showtime = ShowtimeManager.getShowtimeManagerInstance();
+        List<Movie> movies = MovieManager.getMovies();
+        List<Showroom> rooms = ShowroomManager.getShowroom();
 
         // Lookup helpers
         Movie spiderman = findMovie(movies, "SpiderMan");
@@ -117,7 +116,6 @@ public class ImportHelper {
         // Barbie showtime
         showtime.addShowtime(new Showtime(barbie, buildDateTime.apply("12/25/2025", "1:30 PM"), r105));
 
-        //return showtime.getShowtime();
     }
 
     // -------------------------------------------------------------
