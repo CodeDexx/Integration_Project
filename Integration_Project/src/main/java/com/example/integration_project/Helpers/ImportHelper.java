@@ -113,7 +113,7 @@ public class ImportHelper {
 
         // Formatters for parsing date and 12-hour time strings
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a", java.util.Locale.ENGLISH);
 
         /**
          * Helper lambda function to combine a date string and a time string into a single {@link LocalDateTime} object.

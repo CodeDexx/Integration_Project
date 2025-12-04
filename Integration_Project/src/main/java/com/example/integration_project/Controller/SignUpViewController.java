@@ -78,9 +78,9 @@ public class SignUpViewController {
             ClientManager.getInstance().addClient(newClient);
 
             AlertHelper.showInfoAlert("Account Created", "Success", "Your account has been created!");
-            aNameTextField.clear();
-            aPasswordTextField.clear();
-            aEmailTextField.clear();
+
+            clearFields();
+
             returnToClientDashboard();
 
         } catch (Exception e) {
@@ -111,5 +111,14 @@ public class SignUpViewController {
         }  catch (Exception e) {
             AlertHelper.showErrorAlert("Error", "Could not open the client Dashboard", e.getMessage());
         }
+    }
+
+    /**
+     * Method to clear the fields upon successful login or Sign-Up
+     */
+    private void clearFields() {
+        aNameTextField.clear();
+        aEmailTextField.clear();
+        aPasswordTextField.clear();
     }
 }
