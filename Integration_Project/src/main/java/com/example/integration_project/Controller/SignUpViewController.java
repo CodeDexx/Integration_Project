@@ -78,7 +78,9 @@ public class SignUpViewController {
             ClientManager.getInstance().addClient(newClient);
 
             AlertHelper.showInfoAlert("Account Created", "Success", "Your account has been created!");
-
+            aNameTextField.clear();
+            aPasswordTextField.clear();
+            aEmailTextField.clear();
             returnToClientDashboard();
 
         } catch (Exception e) {
