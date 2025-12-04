@@ -16,8 +16,6 @@ import javafx.scene.control.Button;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.util.List;
-
 /**
  * Controller class for the Login View
  * <p>
