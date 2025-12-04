@@ -6,8 +6,8 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integration_project.Controller.AddEditController">
    <children>
-      <Button fx:id="aSaveButton" layoutX="68.0" layoutY="296.0" mnemonicParsing="false" onAction="#handleSaveButtonClick" text="Save" />
-      <Button fx:id="aCancelButton" layoutX="285.0" layoutY="296.0" mnemonicParsing="false" onAction="#handleCancelButtonClick" text="Cancel" />
+      <Button fx:id="aSaveButton" layoutX="68.0" layoutY="296.0" mnemonicParsing="false" onAction="#handleSaveButtonClick" style="-fx-background-color: blue;" text="Save" textFill="WHITE"/>
+      <Button fx:id="aCancelButton" layoutX="285.0" layoutY="296.0" mnemonicParsing="false" onAction="#handleCancelButtonClick" style="-fx-background-color: red;" text="Cancel" textFill="WHITE"/>
       <DatePicker fx:id="aDatePicker" layoutX="126.0" layoutY="171.0" prefHeight="26.0" prefWidth="150.0" />
       <TextField fx:id="aTimeTextField" layoutX="126.0" layoutY="210.0" prefHeight="26.0" prefWidth="150.0" promptText="HH:mm" />
       <ChoiceBox fx:id="aMovieChoiceBox" layoutX="126.0" layoutY="131.0" prefWidth="150.0" />

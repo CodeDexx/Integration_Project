@@ -22,7 +22,7 @@
         <TextField fx:id="aEmailTextField" layoutX="104.0" layoutY="244.0" prefHeight="26.0" prefWidth="273.0" />
         <TextField fx:id="aPasswordTextField" layoutX="104.0" layoutY="319.0" prefHeight="26.0" prefWidth="274.0" />
 
-        <Button fx:id="aSaveButton" layoutX="215.0" layoutY="407.0" mnemonicParsing="false" onAction="#onSaveButtonClick" text="Save" />
+        <Button fx:id="aSaveButton" layoutX="215.0" layoutY="407.0" mnemonicParsing="false" onAction="#onSaveButtonClick" style="-fx-background-color: blue;" text="Save" textFill="WHITE"/>
     </children>
 
 </AnchorPane>
