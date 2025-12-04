@@ -16,7 +16,7 @@
       <Label layoutX="34.0" layoutY="172.0" text="Password:" />
       <TextField fx:id="aEmailTextField" layoutX="70.0" layoutY="132.0" prefHeight="26.0" prefWidth="256.0" />
       <TextField fx:id="aPasswordTextField" layoutX="70.0" layoutY="200.0" prefHeight="26.0" prefWidth="256.0" />
-      <Button fx:id="aLoginButton" layoutX="87.0" layoutY="291.0" mnemonicParsing="false" onAction="#onLoginButtonClick" text="Log In" />
-      <Button fx:id="aSignupButton" layoutX="214.0" layoutY="291.0" mnemonicParsing="false" onAction="#onSignupButtonClick" text="Sign Up" />
+      <Button fx:id="aLoginButton" layoutX="87.0" layoutY="291.0" mnemonicParsing="false" onAction="#onLoginButtonClick" style="-fx-background-color: blue;" text="Log In" textFill="WHITE"/>
+      <Button fx:id="aSignupButton" layoutX="214.0" layoutY="291.0" mnemonicParsing="false" onAction="#onSignupButtonClick" style="-fx-background-color: blue;" text="Sign Up" textFill="WHITE"/>
    </children>
 </AnchorPane>
