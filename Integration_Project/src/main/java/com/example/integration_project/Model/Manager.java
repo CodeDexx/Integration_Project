@@ -1,13 +1,10 @@
 package com.example.integration_project.Model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-/**
+/**<h1>Manager Class</h1>
  * Represents a Manager who extends the User class and manages a list of clients.
  * Provides functionality to add, remove, and retrieve clients managed by this manager.
- * 
- * @author Dieudonne
+ *
+ * @author Dieudonné
  */
 public class Manager extends User{
 

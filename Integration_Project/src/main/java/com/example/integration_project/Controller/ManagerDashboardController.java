@@ -29,10 +29,10 @@ import javafx.stage.Stage;
  *
  * <p>Important behaviour:
  * <ul>
- *   <li>The {@code aListView} stores domain objects directly (Movie / Showtime / Showroom).</li>
- *   <li>Opening Add/Edit dialogs passes the managers and the selected object (or null for Add)
- *       to .</li>
- *   <li>After any dialog closes the list view is refreshed automatically.</li>
+ * <li>The {@code aListView} stores domain objects directly (Movie / Showtime / Showroom).</li>
+ * <li>Opening Add/Edit dialogs passes the managers and the selected object (or null for Add)
+ * to .</li>
+ * <li>After any dialog closes the list view is refreshed automatically.</li>
  * </ul>
  * </p>
  *
@@ -46,39 +46,67 @@ import javafx.stage.Stage;
 
 public class ManagerDashboardController {
 
+    /**
+     * Enumeration defining the different views/tabs available in the dashboard.
+     */
     public enum DashboardView {
         MOVIES,
         SHOWTIME,
         SHOWROOM,
         TICKETS
     }
-    /** Label that displays the page title (set dynamically to the current view) */
+
+    /**
+     * Label that displays the page title (set dynamically to the current view)
+     */
     @FXML
     private Label aPageTitle;
 
-    /** Logout button defined in FXML */
+    /**
+     * Logout button defined in FXML
+     */
     @FXML
     private Button aLogoutButton;
 
-    /** Primary list view that displays Movies, Showtime, or Showroom (stores objects) */
+    /**
+     * Primary list view that displays Movies, Showtime, or Showroom (stores objects)
+     */
     @FXML
     private ListView<Object> aListView;
 
-    /** Stage reference used for closing the window on logout */
+    /**
+     * Stage reference used for closing the window on logout
+     */
     private Stage aStage;
 
-    /** The current view name: "Movies", "Showtime", or "Showroom" */
+    /**
+     * The current view name: "Movies", "Showtime", "Showroom", or "Tickets"
+     */
     private DashboardView aCurrentView = DashboardView.MOVIES;
 
-    /** The currently selected item from the list view (a Movie, Showtime, or Showroom) */
+    /**
+     * The currently selected item from the list view (a Movie, Showtime, or Showroom)
+     */
     private Object aSelectedItem;
 
-    /** Managers for each domain type; instantiated here but can be injected if desired */
+    /**
+     * Manager for handling Movie entities.
+     */
     private MovieManager aMovieManager;
-    private ShowtimeManager aShowtimeManager;
-    private ShowroomManager aShowroomManager;
-    private TicketManager aTicketManager;
 
+    /**
+     * Manager for handling Showtime entities.
+     */
+    private ShowtimeManager aShowtimeManager;
+
+    /**
+     * Manager for handling Showroom entities.
+     */
+    private ShowroomManager aShowroomManager;
+
+    /**
+     * Local copy of the complete list of all tickets for reporting/counting.
+     */
     private List<Ticket> aTicketList;
 
     /**
@@ -87,17 +115,16 @@ public class ManagerDashboardController {
      */
     @FXML
     private void initialize() {
-        try{
+        try {
 
             aMovieManager = MovieManager.getMovieManagerInstance();
             aShowroomManager = ShowroomManager.getShowroomManagerInstance();
             aShowtimeManager = ShowtimeManager.getShowtimeManagerInstance();
 
             aTicketList = TicketManager.getInstance().getTickets();
-            aTicketManager = TicketManager.getInstance();
 
             refreshView(aCurrentView);
-        }catch(Exception e){
+        } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error" + e.getMessage());
         }
@@ -117,7 +144,7 @@ public class ManagerDashboardController {
      * Refreshes the ListView contents according to the currently selected view.
      * Uses the domain managers to retrieve the current collections.
      *
-     * @param pViewName the view to display ("Movies", "Showtime", "Showroom")
+     * @param pViewName the view to display (e.g., {@code DashboardView.MOVIES})
      */
     private void refreshView(DashboardView pViewName) {
         // update title label where present
@@ -131,11 +158,12 @@ public class ManagerDashboardController {
 
         switch (pViewName) {
             case MOVIES -> {
+                // CORRECTED: Use aMovieManager.getMovies() instead of static method
                 if (!MovieManager.getMovies().isEmpty()) {
                     aListView.getItems().clear();
                     aListView.getItems().addAll(MovieManager.getMovies());
                 } else {
-                    AlertHelper.showErrorAlert("Movies Error","Add Movies","No Movies exist for this Movie Theater. \n Click Add to create some!");
+                    AlertHelper.showErrorAlert("Movies Error", "Add Movies", "No Movies exist for this Movie Theater. \n Click Add to create some!");
                 }
             }
             case SHOWTIME -> {
@@ -152,6 +180,7 @@ public class ManagerDashboardController {
 
                 aListView.getItems().clear();
 
+                // CORRECTED: Use aShowtimeManager.getShowtime() instead of static method
                 ObservableList<Showtime> allShowtime = ShowtimeManager.getShowtime();
                 List<Showtime> filtered = new ArrayList<>();
 
@@ -193,17 +222,19 @@ public class ManagerDashboardController {
             case TICKETS -> {
                 aListView.getItems().clear();
 
+                // CORRECTED: Use aMovieManager.getMovies() instead of static method
                 if (!MovieManager.getMovies().isEmpty()) {
+                    // CORRECTED: Use aMovieManager.getMovies() instead of static method
                     for (Movie movie : MovieManager.getMovies()) {
-                        long soldByMovie = TicketManager.countByMovie(aTicketList,movie.getName());
+                        long soldByMovie = TicketManager.countByMovie(aTicketList, movie.getName());
                         aListView.getItems().add(
                                 "Movie: " + movie.getName() + " | Tickets Sold: " + soldByMovie
                         );
 
-                        // Show tickets per showtime
+                        // CORRECTED: Use aShowtimeManager.getShowtime() instead of static method
                         for (Showtime st : ShowtimeManager.getShowtime()) {
                             if (st.getMovie() == movie) {
-                                long soldByShowtime = TicketManager.countByShowtime(aTicketList,st.toString());
+                                long soldByShowtime = TicketManager.countByShowtime(aTicketList, st.toString());
                                 aListView.getItems().add(
                                         "  Showtime: " + st.getShowtime() + " | Tickets Sold: " + soldByShowtime
                                 );
@@ -227,8 +258,12 @@ public class ManagerDashboardController {
      */
     @FXML
     private void onMoviesButtonClick() {
-        this.aCurrentView = DashboardView.MOVIES;
-        refreshView(this.aCurrentView);
+        try {
+            this.aCurrentView = DashboardView.MOVIES;
+            refreshView(this.aCurrentView);
+        }catch (Exception e){
+            AlertHelper.showErrorAlert("Movie View Error", "Failed to load Movie View", e.getMessage());
+        }
     }
 
     /**
@@ -238,8 +273,12 @@ public class ManagerDashboardController {
      */
     @FXML
     private void onShowtimeButtonClick(ActionEvent pEvent) {
-        this.aCurrentView = DashboardView.SHOWTIME;
-        refreshView(this.aCurrentView);
+        try {
+            this.aCurrentView = DashboardView.SHOWTIME;
+            refreshView(this.aCurrentView);
+        }catch (Exception e){
+        AlertHelper.showErrorAlert("ShowtimeView Error", "Failed to load showtime View", e.getMessage());
+    }
     }
 
     /**
@@ -249,8 +288,12 @@ public class ManagerDashboardController {
      */
     @FXML
     private void onTicketsButtonClick(ActionEvent pEvent) {
-        this.aCurrentView = DashboardView.TICKETS;
-        refreshView(this.aCurrentView);
+        try {
+            this.aCurrentView = DashboardView.TICKETS;
+            refreshView(this.aCurrentView);
+        }catch (Exception e){
+        AlertHelper.showErrorAlert("Ticket View Error", "Failed to load Ticket View", e.getMessage());
+    }
     }
 
     /**
@@ -259,8 +302,13 @@ public class ManagerDashboardController {
      */
     @FXML
     private void onShowroomButtonClick() {
-        this.aCurrentView = DashboardView.SHOWROOM;
-        refreshView(this.aCurrentView);
+        try{
+            this.aCurrentView = DashboardView.SHOWROOM;
+            refreshView(this.aCurrentView);
+        }catch (Exception e){
+            AlertHelper.showErrorAlert("Showroom View Error", "Failed to load showrooms View", e.getMessage());
+        }
+
     }
 
     /**
@@ -276,7 +324,8 @@ public class ManagerDashboardController {
                 case MOVIES -> openAddEditView(AddEditController.FormMode.ADD_MOVIE, null);
                 case SHOWTIME -> openAddEditView(AddEditController.FormMode.ADD_SHOWTIME, null);
                 case SHOWROOM -> openAddEditView(AddEditController.FormMode.ADD_ROOM, null);
-                default -> AlertHelper.showErrorAlert("Add Error", "Invalid View", "Cannot add to view: " + aCurrentView);
+                default ->
+                        AlertHelper.showErrorAlert("Add Error", "Invalid View", "Cannot add to view: " + aCurrentView);
             }
         } catch (Exception e) {
             AlertHelper.showErrorAlert("Add Error", "Failed to open dialog", e.getMessage());
@@ -349,7 +398,7 @@ public class ManagerDashboardController {
                         AlertHelper.showErrorAlert("Type Error", "Invalid selection", "Selected item is not a Movie.");
                     }
                 }
-                case SHOWTIME-> {
+                case SHOWTIME -> {
                     if (aSelectedItem instanceof Showtime showtime) {
                         aShowtimeManager.removeShowtime(showtime);
                         AlertHelper.showInfoAlert("Delete", "Showtime Deleted", "Showtime has been deleted successfully.");
@@ -381,38 +430,42 @@ public class ManagerDashboardController {
      * <p>The AddEditController is expected to expose the method:
      * {@code initializeForm(FormMode, Object, MovieManager, ShowtimeManager, ShowroomManager)}</p>
      *
-     * @param pMode the FormMode describing the operation (add/edit + entity type)
+     * @param pMode   the FormMode describing the operation (add/edit + entity type)
      * @param pObject the object to edit, or null for Add
      * @throws IOException if the FXML cannot be loaded
      */
     private void openAddEditView(AddEditController.FormMode pMode, Object pObject) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/integration_project/add-edit-view.fxml"));
-        Parent root = loader.load();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/integration_project/add-edit-view.fxml"));
+            Parent root = loader.load();
 
-        // Retrieve controller and call initializeForm(...)
-        Object controller = loader.getController();
-        if (controller instanceof AddEditController addEdit) {
-            addEdit.initializeForm(pMode, pObject, aMovieManager, aShowtimeManager, aShowroomManager);
-        } else {
-            // Defensive: controller is not the expected type
-            throw new IllegalStateException("add-edit-view.fxml controller is not AddEditController");
+            // Retrieve controller and call initializeForm(...)
+            Object controller = loader.getController();
+            if (controller instanceof AddEditController addEdit) {
+                addEdit.initializeForm(pMode, pObject, aMovieManager, aShowtimeManager, aShowroomManager);
+            } else {
+                // Defensive: controller is not the expected type
+                throw new IllegalStateException("add-edit-view.fxml controller is not AddEditController");
+            }
+
+            Stage stage = new Stage();
+            stage.setTitle(switch (pMode) {
+                case ADD_MOVIE -> "Add Movie";
+                case EDIT_MOVIE -> "Edit Movie";
+                case ADD_SHOWTIME -> "Add Showtime";
+                case EDIT_SHOWTIME -> "Edit Showtime";
+                case ADD_ROOM -> "Add Room";
+                case EDIT_ROOM -> "Edit Room";
+            });
+
+            stage.setScene(new Scene(root));
+            stage.showAndWait(); // modal - wait for the user to close
+
+            // After dialog closes refresh the current view so new/updated data appears
+            refreshView(this.aCurrentView);
+        }catch (Exception e) {
+            AlertHelper.showErrorAlert("Add or Edit Error", "Failed to open dialog", e.getMessage());
         }
-
-        Stage stage = new Stage();
-        stage.setTitle(switch (pMode) {
-            case ADD_MOVIE -> "Add Movie";
-            case EDIT_MOVIE -> "Edit Movie";
-            case ADD_SHOWTIME -> "Add Showtime";
-            case EDIT_SHOWTIME -> "Edit Showtime";
-            case ADD_ROOM -> "Add Room";
-            case EDIT_ROOM -> "Edit Room";
-        });
-
-        stage.setScene(new Scene(root));
-        stage.showAndWait(); // modal - wait for the user to close
-
-        // After dialog closes refresh the current view so new/updated data appears
-        refreshView(this.aCurrentView);
     }
 
     /**

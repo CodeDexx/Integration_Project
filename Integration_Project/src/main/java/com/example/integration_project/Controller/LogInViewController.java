@@ -88,6 +88,8 @@ public class LogInViewController {
         if (email.equals(MANAGER_ACCOUNT.getEmailAddress()) && password.equals(MANAGER_ACCOUNT.getPassword())) {
             clearFields();
             openView("managerDashboard-view.fxml");
+            aEmailTextField.clear();
+            aPasswordTextField.clear();
             return;
         }
 
