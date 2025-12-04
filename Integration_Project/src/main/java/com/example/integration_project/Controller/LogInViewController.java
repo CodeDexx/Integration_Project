@@ -55,7 +55,7 @@ public class LogInViewController {
     /** Sets the signup button to the text "Create an account" if the client has no account */
     @FXML
     private void initialize() {
-        aSignupButton.setText("Create Account");
+        aSignupButton.setText("Sign Up");
 
         ImportHelper.loadClients(); // loads list of clients from ImportHelper into ClientManager
     }
@@ -82,9 +82,11 @@ public class LogInViewController {
 
         if (!EmailValidator.isValidFormat(email)) {
             AlertHelper.showErrorAlert("Login Error", "Invalid Email Format", "Please enter a valid email address (e.g., name@domain.com).");
+            return;
         }
 
         if (email.equals(MANAGER_ACCOUNT.getEmailAddress()) && password.equals(MANAGER_ACCOUNT.getPassword())) {
+            clearFields();
             openView("managerDashboard-view.fxml");
             return;
         }
@@ -101,6 +103,7 @@ public class LogInViewController {
         }
 
         if (foundClient != null) {
+            clearFields();
             openView("clientDashboard-view.fxml");
             return;
         }
@@ -113,6 +116,7 @@ public class LogInViewController {
      */
     @FXML
     private void onSignupButtonClick() {
+        clearFields();
         openView("signup-view.fxml");
     }
 
@@ -121,6 +125,7 @@ public class LogInViewController {
      */
     @FXML
     private void onBackButtonClick() {
+        clearFields();
         Stage stage = (Stage) aBackButton.getScene().getWindow();
         stage.close();
     }
@@ -142,5 +147,13 @@ public class LogInViewController {
         } catch (Exception e) {
             AlertHelper.showErrorAlert("Error", "Could not load the page" +  viewName, e.getMessage());
         }
+    }
+
+    /**
+     * Method to clear the fields upon successful login or Sign-Up
+     */
+    private void clearFields() {
+        aEmailTextField.clear();
+        aPasswordTextField.clear();
     }
 }

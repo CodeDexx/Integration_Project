@@ -93,7 +93,7 @@ public class ImportHelper {
 
         // Formatters for parsing
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a", java.util.Locale.ENGLISH);
 
         // Helper lambda to build LocalDateTime
         BiFunction<String, String, LocalDateTime> buildDateTime = (date, time) -> {
