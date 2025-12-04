@@ -114,7 +114,7 @@ public class SignUpViewController {
     }
 
     /**
-     * Method to clear the fields upon successful login or Sign-Up
+     * Method to clear the fields upon successful Sign-Up
      */
     private void clearFields() {
         aNameTextField.clear();
